@@ -68,39 +68,38 @@ const PROJECTS: Project[] = [
 
 export default function Home() {
   const { user } = useUser();
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
   return (
-    <>
-      <main className="min-h-screen bg-gray-800">
-        {/* Header Section */}
-        <div className="flex items-center justify-between px-4 py-4 sm:px-32">
-          <h1 className="text-3xl font-bold text-gray-200">DevTime</h1>
-          <div className="flex items-center gap-2">
+    <main className="min-h-screen bg-gray-800">
+      {/* Header Section */}
+      <div className="flex items-center justify-between px-4 py-4 sm:px-32">
+        <h1 className="text-3xl font-bold text-gray-200">DevTime</h1>
+        <div className="flex items-center gap-2">
+          {user ? (
             <div className="text-lg font-semibold text-gray-300">
               {user.fullName}
             </div>
-            <UserButton afterSignOutUrl="/" />
-          </div>
+          ) : (
+            // div skeleton with animate-pulse
+            <div className="h-8 w-32 animate-pulse rounded-md bg-gray-700" />
+          )}
+          <UserButton afterSignOutUrl="/" />
         </div>
+      </div>
 
-        {/* Actions Section */}
-        <div className="flex items-center justify-between gap-4 px-4 py-2 sm:px-32">
-          <Search />
-          <button className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-            + New Project
-          </button>
-        </div>
+      {/* Actions Section */}
+      <div className="flex items-center justify-between gap-4 px-4 py-2 sm:px-32">
+        <Search />
+        <button className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+          + New Project
+        </button>
+      </div>
 
-        {/* Project Card List Section */}
-        <div className="grid gap-4 px-4 py-4 sm:grid-cols-3 sm:px-32 md:grid-cols-4">
-          {PROJECTS.map((project, index) => (
-            <ProjectCard key={index} project={project} />
-          ))}
-        </div>
-      </main>
-    </>
+      {/* Project Card List Section */}
+      <div className="grid gap-4 px-4 py-4 sm:grid-cols-3 sm:px-32 md:grid-cols-4">
+        {PROJECTS.map((project, index) => (
+          <ProjectCard key={index} project={project} />
+        ))}
+      </div>
+    </main>
   );
 }

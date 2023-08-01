@@ -12,6 +12,8 @@ Project Description
 
 ### Done ✓
 
+- [x] setup project page  
+- [x] Link ProjectsCard to projects page  
 - [x] Project Card UI  
 - [x] Home page UI  
 - [x] ProjectCard data  

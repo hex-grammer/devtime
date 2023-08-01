@@ -1,8 +1,4 @@
-export enum Progress {
-  TO_DO = "TO_DO",
-  IN_PROGRESS = "IN_PROGRESS",
-  DONE = "DONE",
-}
+export type Progress = "TODO" | "IN_PROGRESS" | "DONE";
 
 export interface Project {
   id: string;
@@ -13,6 +9,7 @@ export interface Project {
   started_at?: string; // ISO date string
   numberOfTasks?: number; // Optional number of tasks in the project
   lastProgress?: string | null; // ISO date string or null if no tasks in "IN_PROGRESS"
+  tasks?: Task[]; // Optional array of tasks in the project
 }
 
 export interface Task {
