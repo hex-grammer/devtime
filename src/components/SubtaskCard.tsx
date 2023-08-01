@@ -8,7 +8,7 @@ interface SubtaskCardProps {
 
 const SubtaskCard: React.FC<SubtaskCardProps> = ({ subtask }) => {
   return (
-    <div className="mb-2 rounded-md bg-white p-2 shadow-md">
+    <div className="mb-2 rounded-md bg-gray-600 p-2 shadow-md">
       <p className="text-md">{subtask.title}</p>
       {/* Render other subtask details if needed */}
     </div>

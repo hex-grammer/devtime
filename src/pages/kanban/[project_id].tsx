@@ -1,4 +1,3 @@
-import { UserButton, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
@@ -76,14 +75,13 @@ const PROJECTS: Project = {
 
 const KanbanPage: React.FC = () => {
   const router = useRouter();
-  const { user } = useUser();
   const { project_id } = router.query;
-  const [projectData, setprojectData] = useState<Project | null>(null);
+  const [projectData, setprojectData] = useState<Project | null>(PROJECTS);
 
   //  wait 2 seconds before setting the project data
   setTimeout(() => {
     setprojectData(PROJECTS);
-  }, 1000);
+  }, 0);
 
   // log project_id in useEffect
   useEffect(() => {
@@ -102,24 +100,8 @@ const KanbanPage: React.FC = () => {
 
   return (
     <main className="min-h-screen bg-gray-800">
-      {/* Header Section */}
-      <div className="flex items-center justify-between px-4 py-4 sm:px-32">
-        <h1 className="text-3xl font-bold text-gray-200">DevTime</h1>
-        <div className="flex items-center gap-2">
-          {user ? (
-            <div className="text-lg font-semibold text-gray-300">
-              {user.fullName}
-            </div>
-          ) : (
-            // div skeleton with animate-pulse
-            <div className="h-8 w-32 animate-pulse rounded-md bg-gray-700" />
-          )}
-          <UserButton afterSignOutUrl="/" />
-        </div>
-      </div>
-
-      {/* Actions Section */}
-      <div className="flex items-center justify-between gap-2 px-4 py-2 sm:px-32">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-2 p-4 sm:px-32">
         {/* back button */}
         <button
           className="transform text-3xl font-semibold text-gray-400 transition-all hover:-translate-x-1 hover:text-white"
@@ -136,7 +118,7 @@ const KanbanPage: React.FC = () => {
       </div>
 
       {/* Kanban */}
-      <div className="grid grid-cols-3 gap-4 px-4 py-4 sm:px-32">
+      <div className="grid grid-cols-4 gap-4 px-4 py-4 sm:px-32">
         {/* TODO */}
         <KanbanSection title="TODO" tasks={todoTasks} />
 
@@ -145,6 +127,21 @@ const KanbanPage: React.FC = () => {
 
         {/* DONE */}
         <KanbanSection title="DONE" tasks={doneTasks} />
+
+        {/* STATS */}
+        <div className="">
+          <div className="rounded-lg bg-gray-900 p-4">
+            <h3 className="text-xl font-bold text-gray-200">STATS</h3>
+            <div className="mt-4 flex gap-4">
+              <div className="flex-1">
+                <p className="text-xs text-gray-500">Working Hours</p>
+                <div className="text-4xl font-bold text-blue-600">
+                  {projectData.working_hours}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

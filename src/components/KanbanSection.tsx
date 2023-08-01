@@ -10,7 +10,7 @@ interface KanbanSectionProps {
 
 const KanbanSection: React.FC<KanbanSectionProps> = ({ title, tasks }) => {
   return (
-    <div className="rounded-lg bg-gray-100 p-4">
+    <div className="rounded-lg text-gray-100">
       <h3 className="mb-4 text-xl font-semibold">{title}</h3>
       {tasks.map((task) => (
         <TaskCard key={task.id} task={task} />

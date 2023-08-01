@@ -12,6 +12,8 @@ Project Description
 
 ### Done ✓
 
+- [x] Update Kanban UI + stats  
+- [x] kanban to dark  
 - [x] setup project page  
 - [x] Link ProjectsCard to projects page  
 - [x] Project Card UI  

@@ -19,7 +19,7 @@ const Search: React.FC<SearchInputProps> = ({ value, onChange, onSearch }) => {
       <input
         type="text"
         value={value}
-        className="h-10 w-full rounded-md border border-gray-500 bg-gray-900 pl-10 pr-4 text-gray-200 shadow-sm focus:border-blue-500 focus:outline-none"
+        className="h-10 w-full rounded-md border border-gray-500 bg-gray-700 pl-10 pr-4 text-gray-200 shadow-sm focus:border-blue-500 focus:outline-none"
         placeholder="Search..."
         onKeyDown={handleKeyDown}
         onChange={onChange}

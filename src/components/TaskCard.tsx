@@ -9,7 +9,7 @@ interface TaskCardProps {
 
 const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   return (
-    <div className="mb-4 rounded-md bg-white p-4 shadow-md">
+    <div className="mb-4 rounded-md bg-gray-700 p-2 py-1 shadow-md">
       <h4 className="mb-2 text-lg font-semibold">{task.title}</h4>
       {/* Render subtasks here */}
       {task.subtasks.map((subtask) => (
