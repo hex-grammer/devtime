@@ -1,14 +1,57 @@
-generator client {
-    provider = "prisma-client-js"
-}
+// schema.prisma
 
 datasource db {
     provider = "mysql"
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+generator client {
+    provider = "prisma-client-js"
+}
+
+enum Progress {
+    TO_DO
+    IN_PROGRESS
+    DONE
+}
+
+model Project {
+    id              String         @id @default(uuid())
+    user_id         String // User identifier for filtering projects per user
+    title           String
+    started_at      DateTime       @default(now())
+    tasks           Task[]
+    progressUpdates TaskProgress[]
+}
+
+model Task {
+    id              String         @id @default(uuid())
+    project_id      String // Foreign key referencing Project
+    title           String
+    step            Progress // Step status (e.g., "TO_DO", "IN_PROGRESS", "DONE")
+    working_hours   Int            @default(0) // Total working hours spent on the task (in seconds)
+    project         Project        @relation(fields: [project_id], references: [id])
+    subtasks        Subtask[]
+    progressUpdates TaskProgress[]
+}
+
+model Subtask {
+    id            String  @id @default(uuid())
+    task_id       String // Foreign key referencing Task
+    title         String
+    is_done       Boolean @default(false) // Whether the subtask is completed or not
+    working_hours Int     @default(0) // Working hours spent on the subtask (in seconds)
+    task          Task    @relation(fields: [task_id], references: [id])
+}
+
+model TaskProgress {
+    id         String   @id @default(uuid())
+    date       DateTime
+    project_id String
+    task_id    String
+    completed  Boolean
+    task       Task     @relation(fields: [task_id], references: [id])
+    project    Project  @relation(fields: [project_id], references: [id])
+
+    @@unique([date, project_id, task_id])
 }

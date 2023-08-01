@@ -12,6 +12,11 @@ Project Description
 
 ### Done ✓
 
+- [x] ProjectCard data  
+- [x] data format utils  
+- [x] data types  
+- [x] Design Database  
+- [x] Home Page basic layout  
 - [x] Setup Clerk  
 - [x] Setup Database  
 
