@@ -7,7 +7,7 @@ interface NewTaskButtonProps {
 }
 
 const NewTaskButton: React.FC<NewTaskButtonProps> = ({ isActive = false }) => {
-  const [editing, setEditing] = useState(isActive || false);
+  const [editing, setEditing] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const { setIsCreateNewTask } = useTaskContext();
 
@@ -38,7 +38,7 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({ isActive = false }) => {
 
   return (
     <div className="mb-1">
-      {editing ? (
+      {editing || isActive ? (
         <input
           type="text"
           value={taskTitle}

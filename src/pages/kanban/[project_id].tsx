@@ -149,18 +149,20 @@ const KanbanPage: React.FC = () => {
   return (
     <main className="min-h-screen bg-gray-800">
       {/* Header */}
-      <div className="flex items-center justify-between gap-2 p-4 sm:px-32">
+      <div className="flex flex-col items-center justify-between gap-2 p-4 pb-0 sm:flex-row sm:px-32 sm:pb-4">
+        <div className="mb-4 flex justify-start gap-2 sm:m-0">
+          <button
+            className="transform text-3xl font-semibold text-gray-400 transition-all hover:-translate-x-1 hover:text-white"
+            onClick={() => router.back()}
+          >
+            <FiArrowLeft />
+          </button>
+          <h2 className="flex-1 text-2xl font-bold text-gray-200">
+            {projectData.title}
+          </h2>
+        </div>
         <button
-          className="transform text-3xl font-semibold text-gray-400 transition-all hover:-translate-x-1 hover:text-white"
-          onClick={() => router.back()}
-        >
-          <FiArrowLeft />
-        </button>
-        <h2 className="flex-1 text-2xl font-bold text-gray-200">
-          {projectData.title}
-        </h2>
-        <button
-          className="flex items-center gap-1 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          className="flex w-full items-center gap-1 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 sm:w-fit"
           onClick={() => void setIsCreateNewTask(true)}
         >
           <AiOutlinePlus className="text-xl font-bold" /> New Task
@@ -168,7 +170,7 @@ const KanbanPage: React.FC = () => {
       </div>
 
       {/* Kanban */}
-      <div className="grid grid-cols-4 gap-4 px-4 py-4 sm:px-32">
+      <div className="grid gap-4 px-4 py-4 sm:grid-cols-4 sm:px-32">
         {/* TODO */}
         <KanbanSection title="TO DO" tasks={todoTasks} />
 

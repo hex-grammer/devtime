@@ -18,6 +18,7 @@ Project Description
 
 ### Done ✓
 
+- [x] responsive design  
 - [x] new task button  
 - [x] Kanban page UI (FE)  
 - [x] Update Kanban UI + stats  
