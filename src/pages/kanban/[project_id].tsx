@@ -1,8 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
 import { FiArrowLeft } from "react-icons/fi";
 import KanbanSection from "~/components/KanbanSection";
 import StatsDetail from "~/components/StatsDetail";
+import { useTaskContext } from "~/context/AppContext";
 import type { Project, Task } from "~/utils/types";
 
 // Dummy data for demonstration purposes
@@ -120,6 +122,7 @@ const PROJECTS: Project = {
 
 const KanbanPage: React.FC = () => {
   const router = useRouter();
+  const { setIsCreateNewTask } = useTaskContext();
   const { project_id } = router.query;
   const [projectData, setprojectData] = useState<Project | null>(PROJECTS);
 
@@ -156,8 +159,11 @@ const KanbanPage: React.FC = () => {
         <h2 className="flex-1 text-2xl font-bold text-gray-200">
           {projectData.title}
         </h2>
-        <button className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-          + New Task
+        <button
+          className="flex items-center gap-1 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          onClick={() => void setIsCreateNewTask(true)}
+        >
+          <AiOutlinePlus className="text-xl font-bold" /> New Task
         </button>
       </div>
 

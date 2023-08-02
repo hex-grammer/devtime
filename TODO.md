@@ -6,16 +6,19 @@ Project Description
 
 ### Todo
 
+- [ ] add new task to dummy data  
+- [ ] Subtask style  
 - [ ] Drag and drop  
-- [ ] Add new task  
 - [ ] Task Dropdown (use ant design)  
 - [ ] Task & subtask time  
+- [ ] done sound (cling)  
 
 ### In Progress
 
 
 ### Done ✓
 
+- [x] new task button  
 - [x] Kanban page UI (FE)  
 - [x] Update Kanban UI + stats  
 - [x] kanban to dark  
