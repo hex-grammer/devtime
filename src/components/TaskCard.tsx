@@ -2,7 +2,7 @@
 import React from "react";
 import { type Task } from "~/utils/types";
 import SubtaskCard from "./SubtaskCard";
-import { formatTime } from "~/utils/formatiTime";
+import { formatTime } from "~/utils/formatTime";
 
 interface TaskCardProps {
   task: Task;

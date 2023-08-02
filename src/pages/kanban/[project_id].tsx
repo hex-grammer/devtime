@@ -36,7 +36,7 @@ const PROJECTS: Project = {
           id: "subtask2",
           task_id: "task1",
           title: "Subtask 2",
-          is_done: true,
+          is_done: false,
           working_hours: 2700,
         },
         {
@@ -60,7 +60,7 @@ const PROJECTS: Project = {
           id: "subtask4",
           task_id: "task2",
           title: "Subtask 4",
-          is_done: false,
+          is_done: true,
           working_hours: 1200,
         },
         {

@@ -8,7 +8,6 @@ Project Description
 
 - [ ] + new project  
 - [ ] add new task to dummy data  
-- [ ] Subtask style  
 - [ ] Drag and drop  
 - [ ] Task Dropdown (use ant design)  
 - [ ] done sound (cling)  
@@ -18,6 +17,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Subtask checklist  
 - [x] Task & subtask time  
 - [x] responsive design  
 - [x] new task button  

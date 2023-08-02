@@ -1,6 +1,6 @@
-// SubtaskCard.tsx
-import React from "react";
-import { formatTime } from "~/utils/formatiTime";
+import React, { useState } from "react";
+import { AiOutlineCheck } from "react-icons/ai";
+import { formatTime } from "~/utils/formatTime";
 import { type Subtask } from "~/utils/types";
 
 interface SubtaskCardProps {
@@ -8,15 +8,32 @@ interface SubtaskCardProps {
 }
 
 const SubtaskCard: React.FC<SubtaskCardProps> = ({ subtask }) => {
+  const [checked, setChecked] = useState(subtask.is_done);
+
+  const toggleChecked = () => {
+    setChecked((prevChecked) => !prevChecked);
+  };
+
   return (
-    <div className="mt-1 rounded-sm bg-gray-600 p-2 py-1 shadow-md">
-      <p className="flex justify-between text-sm">
-        {subtask.title}
-        <span className="ml-2 text-sm text-gray-400">
-          {formatTime(subtask.working_hours)}
+    <div className="mt-1 flex justify-between text-sm">
+      <label
+        className="flex flex-1 cursor-pointer items-center"
+        onClick={toggleChecked}
+      >
+        <div
+          className={`mr-1 flex h-4 w-4 items-center justify-center rounded border border-gray-400 text-xs ${
+            checked ? "border-blue-600 bg-blue-600" : ""
+          }`}
+        >
+          {checked && <AiOutlineCheck />}
+        </div>
+        <span className={checked ? "text-gray-500 line-through" : ""}>
+          {subtask.title}
         </span>
-      </p>
-      {/* Render other subtask details if needed */}
+      </label>
+      <span className="text-sm text-gray-400">
+        {formatTime(subtask.working_hours)}
+      </span>
     </div>
   );
 };
