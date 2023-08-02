@@ -54,7 +54,7 @@ const PROJECTS: Project = {
       project_id: "project1",
       title: "Task 2",
       step: "IN_PROGRESS",
-      working_hours: 7200,
+      working_hours: 34544,
       subtasks: [
         {
           id: "subtask4",
@@ -78,7 +78,7 @@ const PROJECTS: Project = {
       project_id: "project1",
       title: "Task 3",
       step: "DONE",
-      working_hours: 3600,
+      working_hours: 23541,
       subtasks: [
         {
           id: "subtask6",
@@ -95,7 +95,7 @@ const PROJECTS: Project = {
       project_id: "project1",
       title: "Task 4",
       step: "DONE",
-      working_hours: 3600,
+      working_hours: 78678,
       subtasks: [],
       lastProgress: "2023-07-28T10:00:00.000Z",
     },
@@ -104,7 +104,7 @@ const PROJECTS: Project = {
       project_id: "project1",
       title: "Task 5",
       step: "TODO",
-      working_hours: 3600,
+      working_hours: 42,
       subtasks: [],
       lastProgress: "2023-07-28T10:00:00.000Z",
     },
@@ -113,7 +113,7 @@ const PROJECTS: Project = {
       project_id: "project1",
       title: "Task 6",
       step: "TODO",
-      working_hours: 3600,
+      working_hours: 0,
       subtasks: [],
       lastProgress: "2023-07-28T10:00:00.000Z",
     },
