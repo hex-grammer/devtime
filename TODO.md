@@ -6,12 +6,17 @@ Project Description
 
 ### Todo
 
+- [ ] Drag and drop  
+- [ ] Add new task  
+- [ ] Task Dropdown (use ant design)  
+- [ ] Task & subtask time  
 
 ### In Progress
 
 
 ### Done ✓
 
+- [x] Kanban page UI (FE)  
 - [x] Update Kanban UI + stats  
 - [x] kanban to dark  
 - [x] setup project page  

@@ -4,6 +4,7 @@ import type { Project } from "~/utils/types";
 import { Circle } from "rc-progress";
 import { formatAverage } from "~/utils/formatAverage";
 import Link from "next/link";
+import ProgressCircle from "./ProgressCircle";
 
 interface ProjectCardProps {
   project: Project; // Pass the entire project object as a prop
@@ -23,20 +24,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           <h2 className="flex-1 truncate text-lg font-bold text-gray-200">
             {title}
           </h2>
-          <div className="relative h-8 w-8">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-[10px] font-semibold text-gray-400">
-                {progress}%
-              </div>
-            </div>
-            <Circle
-              percent={progress}
-              strokeWidth={10}
-              trailWidth={4}
-              trailColor="#D3D3D388"
-              strokeColor="#2383E2"
-            />
-          </div>
+          <ProgressCircle progress={progress} />
         </div>
         {/* working hours */}
         <div className="mb-2">

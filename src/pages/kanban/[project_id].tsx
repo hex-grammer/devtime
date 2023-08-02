@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import KanbanSection from "~/components/KanbanSection";
+import StatsDetail from "~/components/StatsDetail";
 import type { Project, Task } from "~/utils/types";
 
 // Dummy data for demonstration purposes
@@ -9,7 +10,7 @@ const PROJECTS: Project = {
   id: "project1",
   title: "Build E-commerce Website",
   progress: 75,
-  working_hours: 132,
+  working_hours: 13252,
   daySpent: 3,
   started_at: "2023-03-15T00:00:00.000Z",
   numberOfTasks: 2,
@@ -70,6 +71,50 @@ const PROJECTS: Project = {
       ],
       lastProgress: "2023-07-28T10:00:00.000Z",
     },
+    {
+      id: "task3",
+      project_id: "project1",
+      title: "Task 3",
+      step: "DONE",
+      working_hours: 3600,
+      subtasks: [
+        {
+          id: "subtask6",
+          task_id: "task3",
+          title: "Subtask 6",
+          is_done: true,
+          working_hours: 3600,
+        },
+      ],
+      lastProgress: "2023-07-28T10:00:00.000Z",
+    },
+    {
+      id: "task4",
+      project_id: "project1",
+      title: "Task 4",
+      step: "DONE",
+      working_hours: 3600,
+      subtasks: [],
+      lastProgress: "2023-07-28T10:00:00.000Z",
+    },
+    {
+      id: "task5",
+      project_id: "project1",
+      title: "Task 5",
+      step: "TODO",
+      working_hours: 3600,
+      subtasks: [],
+      lastProgress: "2023-07-28T10:00:00.000Z",
+    },
+    {
+      id: "task6",
+      project_id: "project1",
+      title: "Task 6",
+      step: "TODO",
+      working_hours: 3600,
+      subtasks: [],
+      lastProgress: "2023-07-28T10:00:00.000Z",
+    },
   ],
 };
 
@@ -102,7 +147,6 @@ const KanbanPage: React.FC = () => {
     <main className="min-h-screen bg-gray-800">
       {/* Header */}
       <div className="flex items-center justify-between gap-2 p-4 sm:px-32">
-        {/* back button */}
         <button
           className="transform text-3xl font-semibold text-gray-400 transition-all hover:-translate-x-1 hover:text-white"
           onClick={() => router.back()}
@@ -110,37 +154,28 @@ const KanbanPage: React.FC = () => {
           <FiArrowLeft />
         </button>
         <h2 className="flex-1 text-2xl font-bold text-gray-200">
-          {projectData.title} ({projectData.progress}%)
+          {projectData.title}
         </h2>
-        <button className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-          + New Project
+        <button className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+          + New Task
         </button>
       </div>
 
       {/* Kanban */}
       <div className="grid grid-cols-4 gap-4 px-4 py-4 sm:px-32">
         {/* TODO */}
-        <KanbanSection title="TODO" tasks={todoTasks} />
+        <KanbanSection title="TO DO" tasks={todoTasks} />
 
         {/* IN_PROGRESS */}
-        <KanbanSection title="IN_PROGRESS" tasks={inProgressTasks} />
+        <KanbanSection title="IN PROGRESS" tasks={inProgressTasks} />
 
         {/* DONE */}
         <KanbanSection title="DONE" tasks={doneTasks} />
 
         {/* STATS */}
-        <div className="">
-          <div className="rounded-lg bg-gray-900 p-4">
-            <h3 className="text-xl font-bold text-gray-200">STATS</h3>
-            <div className="mt-4 flex gap-4">
-              <div className="flex-1">
-                <p className="text-xs text-gray-500">Working Hours</p>
-                <div className="text-4xl font-bold text-blue-600">
-                  {projectData.working_hours}
-                </div>
-              </div>
-            </div>
-          </div>
+        <div>
+          <h3 className="mb-2 text-xl font-bold text-gray-200">STATS</h3>
+          <StatsDetail projectData={projectData} />
         </div>
       </div>
     </main>
