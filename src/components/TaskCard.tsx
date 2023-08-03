@@ -2,14 +2,10 @@ import React from "react";
 import type { MenuItem, Task } from "~/utils/types";
 import SubtaskCard from "./SubtaskCard";
 import TaskActions from "./TaskActions";
-import {
-  BsFillPlayFill,
-  BsFillPauseFill,
-  BsFillCheckSquareFill,
-  BsFillPlusSquareFill,
-} from "react-icons/bs";
 import { LuTimerReset } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { LiaEdit } from "react-icons/lia";
+import { VscDiffAdded } from "react-icons/vsc";
 import getMenuItemsByStep, { formatTime } from "~/utils/utils";
 
 interface TaskCardProps {
@@ -18,28 +14,16 @@ interface TaskCardProps {
 
 const MENU: MenuItem[] = [
   {
-    label: "Start",
-    key: "start",
-    action: () => console.log("Start clicked"),
-    icon: <BsFillPlayFill />,
-  },
-  {
-    label: "Pause",
-    key: "pause",
-    action: () => console.log("Pause clicked"),
-    icon: <BsFillPauseFill />,
-  },
-  {
-    label: "Finish",
-    key: "finish",
-    action: () => console.log("Finish clicked"),
-    icon: <BsFillCheckSquareFill />,
+    label: "Rename",
+    key: "rename",
+    action: () => console.log("Rename clicked"),
+    icon: <LiaEdit />,
   },
   {
     label: "Add Subtask",
     key: "add_subtask",
     action: () => console.log("Add Subtask clicked"),
-    icon: <BsFillPlusSquareFill />,
+    icon: <VscDiffAdded />,
   },
   {
     label: "Reset Time",

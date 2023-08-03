@@ -7,17 +7,19 @@ Project Description
 ### Todo
 
 - [ ] Rename Project by click the title  
-- [ ] Drag and drop  
 - [ ] + new project  
+- [ ] Drag and drop  
 - [ ] done sound (cling)  
+- [ ] Database Integration  
 
 ### In Progress
 
 
 ### Done ✓
 
+- [x] Task actions  
+- [x] Subtask delete button  
 - [x] put utils into one file  
-- [x] Task & subtask actions  
 - [x] Subtask checklist  
 - [x] Task & subtask time  
 - [x] responsive design  

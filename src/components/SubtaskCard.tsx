@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineCheck } from "react-icons/ai";
+import { IoCloseSharp } from "react-icons/io5";
 import { type Subtask } from "~/utils/types";
 import { formatTime } from "~/utils/utils";
 
@@ -15,7 +16,7 @@ const SubtaskCard: React.FC<SubtaskCardProps> = ({ subtask }) => {
   };
 
   return (
-    <div className="mt-1 flex justify-between text-sm">
+    <div className="group mt-1 flex justify-between text-sm">
       <label
         className="flex flex-1 cursor-pointer items-center"
         onClick={toggleChecked}
@@ -31,9 +32,14 @@ const SubtaskCard: React.FC<SubtaskCardProps> = ({ subtask }) => {
           {subtask.title}
         </span>
       </label>
-      <span className="text-sm text-gray-400">
-        {formatTime(subtask.working_hours)}
-      </span>
+      <div className="relative flex gap-1">
+        <span className="ml-2 text-sm font-normal text-gray-400">
+          {formatTime(subtask.working_hours)}
+        </span>
+        <div className="absolute right-0 top-0 hidden cursor-pointer rounded-sm bg-gray-600 p-1 group-hover:block">
+          <IoCloseSharp />
+        </div>
+      </div>
     </div>
   );
 };
