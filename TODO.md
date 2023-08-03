@@ -8,12 +8,12 @@ Project Description
 
 - [ ] Actions Functionality  
 - [ ] Rename Project by click the title  
-- [ ] + new project  
 - [ ] Drag and drop  
 - [ ] done sound (cling)  
 
 ### In Progress
 
+- [ ] FE/BE: create new project  
 
 ### Done ✓
 
