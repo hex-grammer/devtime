@@ -17,6 +17,7 @@ Project Description
 
 ### Done ✓
 
+- [x] rename task  
 - [x] Task actions  
 - [x] Subtask delete button  
 - [x] put utils into one file  
