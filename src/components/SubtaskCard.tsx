@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineCheck } from "react-icons/ai";
-import { formatTime } from "~/utils/formatTime";
 import { type Subtask } from "~/utils/types";
+import { formatTime } from "~/utils/utils";
 
 interface SubtaskCardProps {
   subtask: Subtask;

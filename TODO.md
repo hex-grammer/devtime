@@ -16,6 +16,7 @@ Project Description
 
 ### Done ✓
 
+- [x] put utils into one file  
 - [x] Task & subtask actions  
 - [x] Subtask checklist  
 - [x] Task & subtask time  

@@ -1,7 +1,7 @@
 import React from "react";
-import { Dropdown, Space } from "antd";
+import { Dropdown } from "antd";
 import { BsThreeDots } from "react-icons/bs";
-import { MenuItem } from "~/utils/types";
+import type { MenuItem } from "~/utils/types";
 
 interface TaskActionsProps {
   items: MenuItem[];

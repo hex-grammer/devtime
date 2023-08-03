@@ -1,10 +1,8 @@
 import React from "react";
-import { formatWorkingHours } from "~/utils/formatWorkingHours";
 import type { Project } from "~/utils/types";
-import { Circle } from "rc-progress";
-import { formatAverage } from "~/utils/formatAverage";
 import Link from "next/link";
 import ProgressCircle from "./ProgressCircle";
+import { formatAverage, formatWorkingHours } from "~/utils/utils";
 
 interface ProjectCardProps {
   project: Project; // Pass the entire project object as a prop

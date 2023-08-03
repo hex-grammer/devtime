@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { MenuItem, type Task } from "~/utils/types";
+import React from "react";
+import type { MenuItem, Task } from "~/utils/types";
 import SubtaskCard from "./SubtaskCard";
-import { formatTime } from "~/utils/formatTime";
 import TaskActions from "./TaskActions";
 import {
   BsFillPlayFill,
@@ -11,7 +10,7 @@ import {
 } from "react-icons/bs";
 import { LuTimerReset } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import getMenuItemsByStep from "~/utils/getMenuItemsByStep";
+import getMenuItemsByStep, { formatTime } from "~/utils/utils";
 
 interface TaskCardProps {
   task: Task;

@@ -1,7 +1,5 @@
-import { formatAverage } from "~/utils/formatAverage";
-import { formatDate } from "~/utils/formatDate";
-import { formatWorkingHours } from "~/utils/formatWorkingHours";
 import type { Project } from "~/utils/types";
+import { formatAverage, formatDate, formatWorkingHours } from "~/utils/utils";
 
 interface StatsDetailProps {
   projectData: Project;
@@ -36,7 +34,7 @@ const StatsDetail: React.FC<StatsDetailProps> = ({ projectData }) => {
         <p className="text-gray-400">
           Last progress:{" "}
           <span className="text-gray-300">
-            {new Date(projectData.lastProgress).toLocaleString()}
+            {formatDate(projectData.lastProgress)}
           </span>
         </p>
       )}
