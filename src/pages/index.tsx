@@ -1,73 +1,22 @@
 import { UserButton, useUser } from "@clerk/nextjs";
+import axios from "axios";
+import useSWR from "swr";
 import ProjectCard from "~/components/ProjectCard";
+import ProjectSkeleton from "~/components/ProjectSkeleton";
 import Search from "~/components/Search";
 import type { Project } from "~/utils/types";
 
-const PROJECTS: Project[] = [
-  {
-    id: "project1",
-    title: "Build E-commerce Website",
-    progress: 75,
-    working_hours: 132,
-    daySpent: 3,
-    started_at: "2023-03-15T00:00:00.000Z",
-    numberOfTasks: 2,
-    lastProgress: null,
-  },
-  {
-    id: "project2",
-    title: "Mobile App Development",
-    progress: 50,
-    working_hours: 9300,
-    daySpent: 7,
-    started_at: "2023-04-10T00:00:00.000Z",
-    numberOfTasks: 2,
-    lastProgress: null,
-  },
-  {
-    id: "project3",
-    title: "Website Redesign",
-    progress: 25,
-    working_hours: 5325,
-    daySpent: 5,
-    started_at: "2023-06-20T00:00:00.000Z",
-    numberOfTasks: 1,
-    lastProgress: null,
-  },
-  {
-    id: "project4",
-    title: "Data Analysis Tool",
-    progress: 90,
-    working_hours: 6720,
-    daySpent: 12,
-    started_at: "2023-05-10T00:00:00.000Z",
-    numberOfTasks: 3,
-    lastProgress: null,
-  },
-  {
-    id: "project5",
-    title: "Game Development",
-    progress: 100,
-    working_hours: 125172,
-    daySpent: 3,
-    started_at: "2023-07-01T00:00:00.000Z",
-    numberOfTasks: 5,
-    lastProgress: null,
-  },
-  {
-    id: "project6",
-    title: "Software Testing",
-    progress: 40,
-    working_hours: 4800,
-    daySpent: 10,
-    started_at: "2023-06-15T00:00:00.000Z",
-    numberOfTasks: 2,
-    lastProgress: null,
-  },
-];
+const fetcher = (url: string) =>
+  axios.get(url).then((res) => res.data as Project[]);
 
 export default function Home() {
   const { user } = useUser();
+  // Fetch projects using SWR
+  const { data: projects } = useSWR<Project[]>(
+    user ? `/api/project/getByUserId?userId=${user.id}` : null,
+    fetcher
+  );
+
   return (
     <main className="min-h-screen bg-gray-800">
       {/* Header Section */}
@@ -96,9 +45,13 @@ export default function Home() {
 
       {/* Project Card List Section */}
       <div className="grid gap-4 px-4 py-4 sm:grid-cols-3 sm:px-32 md:grid-cols-4">
-        {PROJECTS.map((project, index) => (
-          <ProjectCard key={index} project={project} />
-        ))}
+        {projects ? (
+          projects.map((project, index) => (
+            <ProjectCard key={index} project={project} />
+          ))
+        ) : (
+          <ProjectSkeleton number={4} />
+        )}
       </div>
     </main>
   );

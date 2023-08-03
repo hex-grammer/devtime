@@ -7,15 +7,9 @@ generator client {
     provider = "prisma-client-js"
 }
 
-enum Progress {
-    TO_DO
-    IN_PROGRESS
-    DONE
-}
-
 model Project {
     id              String         @id @default(uuid())
-    user_id         String // User identifier for filtering projects per user
+    user_id         String
     title           String
     started_at      DateTime       @default(now())
     tasks           Task[]
@@ -24,10 +18,10 @@ model Project {
 
 model Task {
     id              String         @id @default(uuid())
-    project_id      String // Foreign key referencing Project
+    project_id      String
     title           String
-    step            Progress // Step status (e.g., "TO_DO", "IN_PROGRESS", "DONE")
-    working_hours   Int            @default(0) // Total working hours spent on the task (in seconds)
+    step            String
+    working_hours   Int            @default(0)
     project         Project        @relation(fields: [project_id], references: [id])
     subtasks        Subtask[]
     progressUpdates TaskProgress[]
@@ -35,10 +29,10 @@ model Task {
 
 model Subtask {
     id            String  @id @default(uuid())
-    task_id       String // Foreign key referencing Task
+    task_id       String
     title         String
-    is_done       Boolean @default(false) // Whether the subtask is completed or not
-    working_hours Int     @default(0) // Working hours spent on the subtask (in seconds)
+    is_done       Boolean @default(false)
+    working_hours Int     @default(0)
     task          Task    @relation(fields: [task_id], references: [id])
 }
 

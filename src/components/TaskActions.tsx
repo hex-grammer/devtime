@@ -41,7 +41,7 @@ const TaskActions: React.FC<TaskActionsProps> = ({ items }) => {
   };
 
   const popoverContent = (
-    <div className="flex flex-col items-start text-left">
+    <div className="mb-0.5 flex flex-col items-start text-left">
       {/* start, pause and finish icons */}
       <div className="mb-0.5 flex w-full justify-between rounded-md bg-gray-100 px-4 py-2 text-lg text-gray-500">
         <BsPlay

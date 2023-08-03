@@ -6,17 +6,20 @@ Project Description
 
 ### Todo
 
+- [ ] Actions Functionality  
 - [ ] Rename Project by click the title  
 - [ ] + new project  
 - [ ] Drag and drop  
 - [ ] done sound (cling)  
-- [ ] Database Integration  
 
 ### In Progress
 
 
 ### Done ✓
 
+- [x] project card skeleton  
+- [x] BE: read projects  
+- [x] Insert dummy data to db  
 - [x] rename task  
 - [x] Task actions  
 - [x] Subtask delete button  

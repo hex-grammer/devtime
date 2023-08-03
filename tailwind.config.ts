@@ -6,4 +6,5 @@ export default {
     extend: {},
   },
   plugins: [],
+  important: true,
 } satisfies Config;
