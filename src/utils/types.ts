@@ -42,3 +42,12 @@ export interface ProjectWithStats extends Project {
   avgPerDay: number;
   lastProgress: string | null; // ISO date string or null if no tasks in "IN_PROGRESS"
 }
+
+export interface MenuItem {
+  label: string;
+  key: string;
+  disabled?: boolean;
+  danger?: boolean;
+  icon?: React.ReactNode;
+  action: () => void;
+}

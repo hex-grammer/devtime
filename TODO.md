@@ -6,10 +6,9 @@ Project Description
 
 ### Todo
 
-- [ ] + new project  
-- [ ] add new task to dummy data  
+- [ ] Rename Project by click the title  
 - [ ] Drag and drop  
-- [ ] Task Dropdown (use ant design)  
+- [ ] + new project  
 - [ ] done sound (cling)  
 
 ### In Progress
@@ -17,6 +16,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Task & subtask actions  
 - [x] Subtask checklist  
 - [x] Task & subtask time  
 - [x] responsive design  
