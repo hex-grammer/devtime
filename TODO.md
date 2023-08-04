@@ -10,7 +10,6 @@ Project Description
 - [ ] Delete subtask  
 - [ ] Stats Value  
 - [ ] Loading indicator on page change  
-- [ ] Actions Functionality  
 - [ ] Rename Project by click the title  
 - [ ] Drag and drop  
 - [ ] Add toastify  
@@ -21,6 +20,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Task Actions functionality  
 - [x] Delete task  
 - [x] Task Order  
 - [x] BE: update task title  

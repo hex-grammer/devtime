@@ -2,13 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import type { MenuItem, Task } from "~/utils/types";
 import SubtaskCard from "./SubtaskCard";
 import TaskActions from "./TaskActions";
-import { LuTimerReset } from "react-icons/lu";
+import { LuCheckSquare, LuPause, LuPlay } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { LiaEdit } from "react-icons/lia";
-import { VscDiffAdded } from "react-icons/vsc";
 import getMenuItemsByStep, { formatTime } from "~/utils/utils";
 import { useTaskMutationContext } from "~/context/TaskMutationContext";
-import NewSubtask from "./NewSubtask";
 import { NewSubtaskProvider } from "~/context/NewSubtaskContext";
 
 interface TaskCardProps {
@@ -23,10 +21,20 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   const taskMutation = useTaskMutationContext();
 
   const handleRename = () => {
+    setEditing(true);
     console.log("Rename clicked");
-    if (!editing) {
-      setEditing(true);
-    }
+  };
+
+  const handlePlay = () => {
+    taskMutation.updateProgress(projectId, task.id, "IN_PROGRESS");
+  };
+
+  const handlePause = () => {
+    taskMutation.updateProgress(projectId, task.id, "TODO");
+  };
+
+  const handleFinish = () => {
+    taskMutation.updateProgress(projectId, task.id, "DONE");
   };
 
   const handleDelete = () => {
@@ -34,24 +42,36 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   };
 
   const MENU: MenuItem[] = [
-    // {
-    //   label: "Reset Time",
-    //   key: "reset_time",
-    //   action: handleResetTime,
-    //   icon: <LuTimerReset />,
-    // },
+    {
+      label: "Do It!",
+      key: "play",
+      action: handlePlay,
+      icon: <LuPlay />,
+    },
+    {
+      label: "Pause",
+      key: "pause",
+      action: handlePause,
+      icon: <LuPause />,
+    },
+    {
+      label: "Finish",
+      key: "finish",
+      action: handleFinish,
+      icon: <LuCheckSquare />,
+    },
     {
       label: "Rename",
       key: "rename",
       action: handleRename,
       icon: <LiaEdit />,
     },
-    {
-      label: "Add Subtask",
-      key: "add_subtask",
-      action: () => console.log("Add Subtask clicked"),
-      icon: <VscDiffAdded />,
-    },
+    // {
+    //   label: "Add Subtask",
+    //   key: "add_subtask",
+    //   action: () => console.log("Add Subtask clicked"),
+    //   icon: <VscDiffAdded />,
+    // },
     {
       label: "Delete",
       key: "delete",
@@ -113,7 +133,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
             <span className="ml-2 whitespace-nowrap text-sm font-normal text-gray-400">
               {formatTime(task.working_hours)}
             </span>
-            <TaskActions items={getMenuItemsByStep(task.step, MENU)} />
+            <TaskActions
+              projectId={projectId}
+              taskId={task.id}
+              progress={task.step}
+              items={getMenuItemsByStep(task.step, MENU)}
+            />
           </div>
         </div>
         {/* Render subtasks here */}

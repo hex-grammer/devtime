@@ -9,6 +9,11 @@ interface TaskMutationContextType {
     order: "first" | "last"
   ) => void;
   updateTitle: (projectId: string, taskId: string, taskTitle: string) => void;
+  updateProgress: (
+    projectId: string,
+    taskId: string,
+    progress: "TODO" | "IN_PROGRESS" | "DONE"
+  ) => void;
   deleteTask: (projectId: string, taskId: string) => void;
 }
 
@@ -63,6 +68,21 @@ export const TaskMutationProvider: React.FC<TaskMutationProviderProps> = ({
       });
   };
 
+  const updateProgress = (
+    projectId: string,
+    taskId: string,
+    progress: "TODO" | "IN_PROGRESS" | "DONE"
+  ) => {
+    axios
+      .put(`/api/task/updateProgress`, { taskId, progress })
+      .then(async () => {
+        await mutate(`/api/task/get-all?projectId=${projectId}`);
+      })
+      .catch((error) => {
+        console.error("Error updating progress:", error);
+      });
+  };
+
   const deleteTask = (projectId: string, taskId: string) => {
     axios
       .delete(`/api/task/delete?taskId=${taskId}`)
@@ -77,6 +97,7 @@ export const TaskMutationProvider: React.FC<TaskMutationProviderProps> = ({
   const value: TaskMutationContextType = {
     createNewTask,
     updateTitle,
+    updateProgress,
     deleteTask,
   };
 
