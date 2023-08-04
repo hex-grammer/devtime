@@ -27,12 +27,14 @@ const KanbanSection: React.FC<KanbanSectionProps> = ({
         </div>
       )}
       {title === "TO DO" && isCreateNewTask && (
-        <NewTaskButton isActive projectId={projectId} />
+        <NewTaskButton isActive projectId={projectId} order="first" />
       )}
       {tasks.map((task) => (
         <TaskCard key={task.id} task={task} projectId={projectId} />
       ))}
-      {title === "TO DO" && <NewTaskButton projectId={projectId} />}
+      {title === "TO DO" && (
+        <NewTaskButton projectId={projectId} order="last" />
+      )}
     </div>
   );
 };

@@ -11,9 +11,10 @@ export default async function handler(
     return res.status(405).end(); // Method Not Allowed
   }
 
-  const { projectId, taskTitle } = req.body as {
+  const { projectId, taskTitle, order } = req.body as {
     projectId: string;
     taskTitle: string;
+    order: "first" | "last";
   };
 
   try {
@@ -25,12 +26,23 @@ export default async function handler(
       return res.status(404).json({ error: "Project not found" });
     }
 
+    // get smallest or largest order value
+    const lastOrder = await prisma.task.findFirst({
+      where: { project_id: projectId },
+      orderBy: { order: order === "first" ? "asc" : "desc" },
+      select: { order: true },
+    });
+
     const newTask = await prisma.task.create({
       data: {
         project: { connect: { id: projectId } },
         title: taskTitle,
         step: "TODO", // Set the initial step for the task
         working_hours: 0, // Initialize working hours for the task
+        order:
+          order === "first"
+            ? (lastOrder?.order ?? 0) - 1
+            : (lastOrder?.order ?? 0) + 1,
       },
     });
 

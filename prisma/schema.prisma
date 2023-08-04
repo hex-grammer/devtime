@@ -22,6 +22,7 @@ model Task {
     title           String
     step            String
     working_hours   Int            @default(0)
+    order           Float          @default(0)
     project         Project        @relation(fields: [project_id], references: [id])
     subtasks        Subtask[]
     progressUpdates TaskProgress[]
@@ -32,6 +33,7 @@ model Subtask {
     task_id       String
     title         String
     is_done       Boolean @default(false)
+    order         Float   @default(0)
     working_hours Int     @default(0)
     task          Task    @relation(fields: [task_id], references: [id])
 }

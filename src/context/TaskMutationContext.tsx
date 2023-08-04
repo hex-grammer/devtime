@@ -3,7 +3,11 @@ import { createContext, useContext, type ReactNode } from "react";
 import { mutate } from "swr";
 
 interface TaskMutationContextType {
-  createNewTask: (projectId: string, taskTitle: string) => void;
+  createNewTask: (
+    projectId: string,
+    taskTitle: string,
+    order: "first" | "last"
+  ) => void;
   updateTitle: (projectId: string, taskId: string, taskTitle: string) => void;
   deleteTask: (projectId: string, taskId: string) => void;
 }
@@ -29,9 +33,13 @@ interface TaskMutationProviderProps {
 export const TaskMutationProvider: React.FC<TaskMutationProviderProps> = ({
   children,
 }) => {
-  const createNewTask = (projectId: string, taskTitle: string) => {
+  const createNewTask = (
+    projectId: string,
+    taskTitle: string,
+    order: "first" | "last"
+  ) => {
     axios
-      .post("/api/task/create", { projectId, taskTitle })
+      .post("/api/task/create", { projectId, taskTitle, order })
       .then(async () => {
         await mutate(`/api/task/get-all?projectId=${projectId}`);
       })

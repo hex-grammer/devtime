@@ -7,11 +7,13 @@ import { useTaskMutationContext } from "~/context/TaskMutationContext";
 interface NewTaskButtonProps {
   isActive?: boolean;
   projectId: string;
+  order: "first" | "last";
 }
 
 const NewTaskButton: React.FC<NewTaskButtonProps> = ({
   isActive = false,
   projectId,
+  order,
 }) => {
   const [editing, setEditing] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
@@ -32,7 +34,7 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
     }
 
     // create a new task
-    taskMutation.createNewTask(projectId, taskTitle);
+    taskMutation.createNewTask(projectId, taskTitle, order);
 
     setTaskTitle("");
     setEditing(false);

@@ -6,7 +6,6 @@ Project Description
 
 ### Todo
 
-- [ ] Task Order  
 - [ ] Create SubTask  
 - [ ] Loading indicator on page change  
 - [ ] Add toastify  
@@ -20,6 +19,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Task Order  
 - [x] BE: update task title  
 - [x] mutate on create task  
 - [x] BE: create new task  

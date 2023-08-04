@@ -25,6 +25,9 @@ export default async function handler(
           include: {
             subtasks: true,
           },
+          orderBy: {
+            order: "asc",
+          },
         },
       },
     });
