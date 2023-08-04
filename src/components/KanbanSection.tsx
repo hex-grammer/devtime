@@ -17,9 +17,12 @@ const KanbanSection: React.FC<KanbanSectionProps> = ({
 }) => {
   const { isCreateNewTask } = useTaskContext();
   const { isTaskLoading } = useTaskLoadingContext();
+
   return (
     <div className="rounded-lg text-gray-100">
-      <h3 className="mb-2 text-xl font-semibold">{title}</h3>
+      <h3 className="mb-2 flex items-end justify-between text-xl font-semibold">
+        {title}
+      </h3>
       {/* skeleton if isTaskLoading */}
       {isTaskLoading && (
         <div className="animate-pulse">

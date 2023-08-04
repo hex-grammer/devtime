@@ -6,6 +6,8 @@ Project Description
 
 ### Todo
 
+- [ ] put on top on progress change  
+- [ ] Time tracking  
 - [ ] Create SubTask  
 - [ ] Delete subtask  
 - [ ] Stats Value  
@@ -20,6 +22,7 @@ Project Description
 
 ### Done ✓
 
+- [x] tracking working hours  
 - [x] Task Actions functionality  
 - [x] Delete task  
 - [x] Task Order  

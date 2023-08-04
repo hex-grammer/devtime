@@ -8,6 +8,7 @@ import { LiaEdit } from "react-icons/lia";
 import getMenuItemsByStep, { formatTime } from "~/utils/utils";
 import { useTaskMutationContext } from "~/context/TaskMutationContext";
 import { NewSubtaskProvider } from "~/context/NewSubtaskContext";
+import { GiSandsOfTime } from "react-icons/gi";
 
 interface TaskCardProps {
   task: Task;
@@ -19,6 +20,35 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   const [taskTitle, setTaskTitle] = useState<string>(task.title);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const taskMutation = useTaskMutationContext();
+  const [timer, setTimer] = useState(0);
+
+  // send request every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (task.step === "IN_PROGRESS") {
+        setTimer((timer) => {
+          taskMutation.updateWorkingHours(
+            projectId,
+            task.id,
+            task.working_hours + (timer + 1)
+          );
+          return timer;
+        });
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // timer every 1 second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (task.step === "IN_PROGRESS") {
+        setTimer((timer) => timer + 1);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [task.step]);
 
   const handleRename = () => {
     setEditing(true);
@@ -129,9 +159,19 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
               {taskTitle}
             </div>
           )}
-          <div className="flex gap-1">
-            <span className="ml-2 whitespace-nowrap text-sm font-normal text-gray-400">
-              {formatTime(task.working_hours)}
+          <div className="flex items-center gap-1">
+            <span className="whitespace-nowrap font-normal text-gray-400">
+              {task.step === "IN_PROGRESS" ? (
+                <div className="flex items-center gap-1">
+                  {formatTime(task.working_hours + (timer % 10))}
+                  <div className="relative">
+                    <GiSandsOfTime className="absolute left-0 top-0 animate-ping text-xs text-blue-500 duration-500" />
+                    <GiSandsOfTime className="text-xs text-blue-500" />
+                  </div>
+                </div>
+              ) : (
+                formatTime(task.working_hours)
+              )}
             </span>
             <TaskActions
               projectId={projectId}

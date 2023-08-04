@@ -35,14 +35,15 @@ export const formatTime = (seconds: number): string => {
   }
 
   const hours = Math.floor(seconds / 3600);
-  const remainingSeconds = seconds % 3600;
-  const minutes = Math.floor(remainingSeconds / 60);
+  let remSec = seconds % 3600;
+  const minutes = Math.floor(remSec / 60);
+  remSec = remSec % 60;
 
   if (hours > 0) {
     return `${hours}h ${minutes}m`;
   }
 
-  return `${minutes}m`;
+  return `${minutes}m ${remSec}s`;
 };
 
 export const formatDate = (dateString: string): string => {
