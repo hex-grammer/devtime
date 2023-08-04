@@ -31,7 +31,7 @@ export default async function handler(
             orderBy: {
               date: "desc",
             },
-            take: 1,
+            // take: 1,
           },
         },
         orderBy: {

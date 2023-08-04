@@ -18,6 +18,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Kanban loading skeleton  
 - [x] sort project by started_at desc  
 - [x] BE: read tasks  
 - [x] FE/BE: create new project  
