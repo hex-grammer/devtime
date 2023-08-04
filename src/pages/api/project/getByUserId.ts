@@ -34,6 +34,9 @@ export default async function handler(
             take: 1,
           },
         },
+        orderBy: {
+          started_at: "desc",
+        },
       });
 
       // Calculate accumulated working_hours from related tasks for each project
