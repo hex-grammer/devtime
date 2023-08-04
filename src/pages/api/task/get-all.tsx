@@ -11,8 +11,7 @@ export default async function handler(
     return res.status(405).end(); // Method not allowed
   }
 
-  const { userId, projectId } = req.query as {
-    userId: string;
+  const { projectId } = req.query as {
     projectId: string;
   };
 
@@ -20,7 +19,6 @@ export default async function handler(
     const project = await prisma.project.findUnique({
       where: {
         id: projectId,
-        user_id: userId,
       },
       include: {
         tasks: {

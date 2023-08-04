@@ -1,15 +1,24 @@
 import { AiOutlinePlus } from "react-icons/ai";
 import { useState } from "react";
 import { useTaskContext } from "~/context/AppContext";
+import axios from "axios";
+import { Project } from "~/utils/types";
+import { useTaskMutationContext } from "~/context/TaskMutationContext";
+// import { mutate } from "swr";
 
 interface NewTaskButtonProps {
   isActive?: boolean;
+  projectId: string;
 }
 
-const NewTaskButton: React.FC<NewTaskButtonProps> = ({ isActive = false }) => {
+const NewTaskButton: React.FC<NewTaskButtonProps> = ({
+  isActive = false,
+  projectId,
+}) => {
   const [editing, setEditing] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const { setIsCreateNewTask } = useTaskContext();
+  const taskMutation = useTaskMutationContext();
 
   const handleButtonClick = () => {
     if (!editing) {
@@ -25,7 +34,7 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({ isActive = false }) => {
     }
 
     // create a new task
-    console.log(taskTitle);
+    taskMutation.createNewTask(projectId, taskTitle);
 
     setTaskTitle("");
     setEditing(false);
@@ -43,9 +52,13 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({ isActive = false }) => {
           type="text"
           value={taskTitle}
           onChange={handleChange}
-          onBlur={handleSave}
+          onBlur={() => handleSave}
           placeholder="Task title..."
-          onKeyDown={(event) => event.key === "Enter" && handleSave()}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              void handleSave();
+            }
+          }}
           className="w-full cursor-text rounded-md border border-blue-600 bg-gray-700 p-2 py-1 text-left text-gray-200 outline-none"
           autoFocus
         />

@@ -53,12 +53,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
   const handleSave = () => {
     // return if task title is empty
+    console.log(taskTitle);
     if (!taskTitle) {
       return setEditing(false);
     }
 
     // create a new task
     console.log(taskTitle);
+    console.log(task);
 
     // setTaskTitle("");
     setEditing(false);

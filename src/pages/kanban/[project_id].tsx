@@ -1,4 +1,3 @@
-import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -7,6 +6,7 @@ import useSWR from "swr";
 import KanbanSection from "~/components/KanbanSection";
 import StatsDetail from "~/components/StatsDetail";
 import { useTaskContext, useTaskLoadingContext } from "~/context/AppContext";
+import { TaskMutationProvider } from "~/context/TaskMutationContext";
 import type { Project, Task } from "~/utils/types";
 
 const fetcher = async (url: string) => {
@@ -16,13 +16,12 @@ const fetcher = async (url: string) => {
 
 const KanbanPage: React.FC = () => {
   const router = useRouter();
-  const { user } = useUser();
   const { setIsCreateNewTask } = useTaskContext();
   const { setIsTaskLoading } = useTaskLoadingContext();
   const { project_id } = router.query as { project_id: string };
 
   const { data: projectData } = useSWR<Project>(
-    `/api/task/get-all?userId=${user?.id}&projectId=${project_id}`,
+    `/api/task/get-all?projectId=${project_id}`,
     fetcher
   );
 
@@ -62,22 +61,36 @@ const KanbanPage: React.FC = () => {
       </div>
 
       {/* Kanban */}
-      <div className="grid gap-4 px-4 py-4 sm:grid-cols-4 sm:px-32">
-        {/* TODO */}
-        <KanbanSection title="TO DO" tasks={todoTasks} />
+      <TaskMutationProvider>
+        <div className="grid gap-4 px-4 py-4 sm:grid-cols-4 sm:px-32">
+          {/* TODO */}
+          <KanbanSection
+            projectId={projectData?.id ?? ""}
+            title="TO DO"
+            tasks={todoTasks}
+          />
 
-        {/* IN_PROGRESS */}
-        <KanbanSection title="IN PROGRESS" tasks={inProgressTasks} />
+          {/* IN_PROGRESS */}
+          <KanbanSection
+            projectId={projectData?.id ?? ""}
+            title="IN PROGRESS"
+            tasks={inProgressTasks}
+          />
 
-        {/* DONE */}
-        <KanbanSection title="DONE" tasks={doneTasks} />
+          {/* DONE */}
+          <KanbanSection
+            projectId={projectData?.id ?? ""}
+            title="DONE"
+            tasks={doneTasks}
+          />
 
-        {/* STATS */}
-        <div>
-          <h3 className="mb-2 text-xl font-bold text-gray-200">STATS</h3>
-          <StatsDetail projectData={projectData} />
+          {/* STATS */}
+          <div>
+            <h3 className="mb-2 text-xl font-bold text-gray-200">STATS</h3>
+            <StatsDetail projectData={projectData} />
+          </div>
         </div>
-      </div>
+      </TaskMutationProvider>
     </main>
   );
 };

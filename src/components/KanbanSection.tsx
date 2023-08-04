@@ -1,5 +1,5 @@
 import React from "react";
-import { type Task } from "~/utils/types";
+import { Project, type Task } from "~/utils/types";
 import TaskCard from "./TaskCard";
 import NewTaskButton from "./NewTaskButton";
 import { useTaskContext, useTaskLoadingContext } from "~/context/AppContext";
@@ -7,9 +7,14 @@ import { useTaskContext, useTaskLoadingContext } from "~/context/AppContext";
 interface KanbanSectionProps {
   title: string;
   tasks: Task[];
+  projectId: string;
 }
 
-const KanbanSection: React.FC<KanbanSectionProps> = ({ title, tasks }) => {
+const KanbanSection: React.FC<KanbanSectionProps> = ({
+  title,
+  tasks,
+  projectId,
+}) => {
   const { isCreateNewTask } = useTaskContext();
   const { isTaskLoading } = useTaskLoadingContext();
   return (
@@ -21,11 +26,13 @@ const KanbanSection: React.FC<KanbanSectionProps> = ({ title, tasks }) => {
           <div className="mb-2 h-8 rounded-md bg-gray-700" />
         </div>
       )}
-      {title === "TO DO" && isCreateNewTask && <NewTaskButton isActive />}
+      {title === "TO DO" && isCreateNewTask && (
+        <NewTaskButton isActive projectId={projectId} />
+      )}
       {tasks.map((task) => (
         <TaskCard key={task.id} task={task} />
       ))}
-      {title === "TO DO" && <NewTaskButton />}
+      {title === "TO DO" && <NewTaskButton projectId={projectId} />}
     </div>
   );
 };

@@ -6,7 +6,9 @@ Project Description
 
 ### Todo
 
-- [ ] BE: create new task  
+- [ ] BE: update task  
+- [ ] Create SubTask  
+- [ ] Task Order  
 - [ ] Loading indicator on page change  
 - [ ] Actions Functionality  
 - [ ] Rename Project by click the title  
@@ -18,6 +20,8 @@ Project Description
 
 ### Done ✓
 
+- [x] mutate on create task  
+- [x] BE: create new task  
 - [x] Kanban loading skeleton  
 - [x] sort project by started_at desc  
 - [x] BE: read tasks  
