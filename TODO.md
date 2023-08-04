@@ -6,10 +6,10 @@ Project Description
 
 ### Todo
 
-- [ ] BE: update task  
-- [ ] Create SubTask  
 - [ ] Task Order  
+- [ ] Create SubTask  
 - [ ] Loading indicator on page change  
+- [ ] Add toastify  
 - [ ] Actions Functionality  
 - [ ] Rename Project by click the title  
 - [ ] Drag and drop  
@@ -20,6 +20,7 @@ Project Description
 
 ### Done ✓
 
+- [x] BE: update task title  
 - [x] mutate on create task  
 - [x] BE: create new task  
 - [x] Kanban loading skeleton  

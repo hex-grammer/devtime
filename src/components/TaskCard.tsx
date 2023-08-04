@@ -7,15 +7,18 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { LiaEdit } from "react-icons/lia";
 import { VscDiffAdded } from "react-icons/vsc";
 import getMenuItemsByStep, { formatTime } from "~/utils/utils";
+import { useTaskMutationContext } from "~/context/TaskMutationContext";
 
 interface TaskCardProps {
   task: Task;
+  projectId: string;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   const [editing, setEditing] = useState(false);
   const [taskTitle, setTaskTitle] = useState<string>(task.title);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const taskMutation = useTaskMutationContext();
 
   const handleButtonClick = () => {
     if (!editing) {
@@ -53,14 +56,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
   const handleSave = () => {
     // return if task title is empty
-    console.log(taskTitle);
     if (!taskTitle) {
       return setEditing(false);
     }
 
     // create a new task
-    console.log(taskTitle);
-    console.log(task);
+    taskMutation.updateTitle(projectId, task.id, taskTitle);
 
     // setTaskTitle("");
     setEditing(false);

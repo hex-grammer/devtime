@@ -1,9 +1,11 @@
 import axios from "axios";
-import { createContext, useContext, ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { mutate } from "swr";
 
 interface TaskMutationContextType {
   createNewTask: (projectId: string, taskTitle: string) => void;
+  updateTitle: (projectId: string, taskId: string, taskTitle: string) => void;
+  deleteTask: (projectId: string, taskId: string) => void;
 }
 
 const TaskMutationContext = createContext<TaskMutationContextType | undefined>(
@@ -38,8 +40,36 @@ export const TaskMutationProvider: React.FC<TaskMutationProviderProps> = ({
       });
   };
 
+  const updateTitle = (
+    projectId: string,
+    taskId: string,
+    taskTitle: string
+  ) => {
+    axios
+      .put(`/api/task/update`, { taskId, taskTitle })
+      .then(async () => {
+        await mutate(`/api/task/get-all?projectId=${projectId}`);
+      })
+      .catch((error) => {
+        console.error("Error updating task:", error);
+      });
+  };
+
+  const deleteTask = (projectId: string, taskId: string) => {
+    axios
+      .delete(`/api/task/delete/${taskId}`)
+      .then(async () => {
+        await mutate(`/api/task/get-all?projectId=${projectId}`);
+      })
+      .catch((error) => {
+        console.error("Error deleting task:", error);
+      });
+  };
+
   const value: TaskMutationContextType = {
     createNewTask,
+    updateTitle,
+    deleteTask,
   };
 
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { Project, type Task } from "~/utils/types";
+import { type Task } from "~/utils/types";
 import TaskCard from "./TaskCard";
 import NewTaskButton from "./NewTaskButton";
 import { useTaskContext, useTaskLoadingContext } from "~/context/AppContext";
@@ -30,7 +30,7 @@ const KanbanSection: React.FC<KanbanSectionProps> = ({
         <NewTaskButton isActive projectId={projectId} />
       )}
       {tasks.map((task) => (
-        <TaskCard key={task.id} task={task} />
+        <TaskCard key={task.id} task={task} projectId={projectId} />
       ))}
       {title === "TO DO" && <NewTaskButton projectId={projectId} />}
     </div>

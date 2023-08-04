@@ -1,8 +1,6 @@
 import { AiOutlinePlus } from "react-icons/ai";
 import { useState } from "react";
 import { useTaskContext } from "~/context/AppContext";
-import axios from "axios";
-import { Project } from "~/utils/types";
 import { useTaskMutationContext } from "~/context/TaskMutationContext";
 // import { mutate } from "swr";
 
@@ -52,7 +50,7 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
           type="text"
           value={taskTitle}
           onChange={handleChange}
-          onBlur={() => handleSave}
+          onBlur={() => void handleSave()}
           placeholder="Task title..."
           onKeyDown={(event) => {
             if (event.key === "Enter") {
