@@ -8,6 +8,8 @@ import { LiaEdit } from "react-icons/lia";
 import { VscDiffAdded } from "react-icons/vsc";
 import getMenuItemsByStep, { formatTime } from "~/utils/utils";
 import { useTaskMutationContext } from "~/context/TaskMutationContext";
+import NewSubtask from "./NewSubtask";
+import { NewSubtaskProvider } from "~/context/NewSubtaskContext";
 
 interface TaskCardProps {
   task: Task;
@@ -20,17 +22,28 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const taskMutation = useTaskMutationContext();
 
-  const handleButtonClick = () => {
+  const handleRename = () => {
+    console.log("Rename clicked");
     if (!editing) {
       setEditing(true);
     }
   };
 
+  const handleDelete = () => {
+    taskMutation.deleteTask(projectId, task.id);
+  };
+
   const MENU: MenuItem[] = [
+    // {
+    //   label: "Reset Time",
+    //   key: "reset_time",
+    //   action: handleResetTime,
+    //   icon: <LuTimerReset />,
+    // },
     {
       label: "Rename",
       key: "rename",
-      action: handleButtonClick,
+      action: handleRename,
       icon: <LiaEdit />,
     },
     {
@@ -40,16 +53,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
       icon: <VscDiffAdded />,
     },
     {
-      label: "Reset Time",
-      key: "reset_time",
-      action: () => console.log("Reset Time clicked"),
-      icon: <LuTimerReset />,
-    },
-    {
       label: "Delete",
       key: "delete",
       danger: true,
-      action: () => console.log("Delete clicked"),
+      action: handleDelete,
       icon: <RiDeleteBin6Line />,
     },
   ];
@@ -78,42 +85,53 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   }, [editing]);
 
   return (
-    <div
-      className={`mb-1 rounded-md bg-gray-700 p-2 shadow-md ${
-        task.subtasks.length > 0 ? "py-2" : "py-1"
-      }`}
-    >
-      <div className="group flex items-end justify-between font-semibold">
-        {editing ? (
-          <input
-            type="text"
-            value={taskTitle}
-            onChange={handleChange}
-            onBlur={handleSave}
-            placeholder="Task title..."
-            onKeyDown={(event) => event.key === "Enter" && handleSave()}
-            className="m-0 truncate bg-gray-700 text-left text-gray-200 outline-none"
-            ref={inputRef}
-            autoFocus
-          />
-        ) : (
-          <div className="w-full cursor-pointer" onClick={handleButtonClick}>
-            {taskTitle}
+    <NewSubtaskProvider>
+      <div
+        className={`mb-1 rounded-md bg-gray-700 p-2 shadow-md ${
+          task.subtasks.length > 0 ? "py-2" : "py-1"
+        }`}
+      >
+        <div className="group flex items-end justify-between font-semibold">
+          {editing ? (
+            <input
+              type="text"
+              value={taskTitle}
+              onChange={handleChange}
+              onBlur={handleSave}
+              placeholder="Task title..."
+              onKeyDown={(event) => event.key === "Enter" && handleSave()}
+              className="m-0 truncate border-b bg-gray-700 text-left text-gray-200 outline-none"
+              ref={inputRef}
+              autoFocus
+            />
+          ) : (
+            <div className="w-full cursor-pointer" onClick={handleRename}>
+              {taskTitle}
+            </div>
+          )}
+          <div className="flex gap-1">
+            <span className="ml-2 whitespace-nowrap text-sm font-normal text-gray-400">
+              {formatTime(task.working_hours)}
+            </span>
+            <TaskActions items={getMenuItemsByStep(task.step, MENU)} />
           </div>
-        )}
-        <div className="flex gap-1">
-          <span className="ml-2 whitespace-nowrap text-sm font-normal text-gray-400">
-            {formatTime(task.working_hours)}
-          </span>
-          <TaskActions items={getMenuItemsByStep(task.step, MENU)} />
         </div>
+        {/* Render subtasks here */}
+        {task.subtasks.length > 0 && <hr className="my-1 border-gray-500" />}
+        {task.subtasks.map((subtask) => (
+          <SubtaskCard key={subtask.id} subtask={subtask} />
+        ))}
+        {/* <NewSubtask
+          subtask={{
+            id: "new",
+            task_id: task.id,
+            title: "",
+            is_done: false,
+            working_hours: 54336,
+          }}
+        /> */}
       </div>
-      {/* Render subtasks here */}
-      {task.subtasks.length > 0 && <hr className="my-1 border-gray-500" />}
-      {task.subtasks.map((subtask) => (
-        <SubtaskCard key={subtask.id} subtask={subtask} />
-      ))}
-    </div>
+    </NewSubtaskProvider>
   );
 };
 

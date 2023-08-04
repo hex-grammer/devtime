@@ -7,11 +7,13 @@ Project Description
 ### Todo
 
 - [ ] Create SubTask  
+- [ ] Delete subtask  
+- [ ] Stats Value  
 - [ ] Loading indicator on page change  
-- [ ] Add toastify  
 - [ ] Actions Functionality  
 - [ ] Rename Project by click the title  
 - [ ] Drag and drop  
+- [ ] Add toastify  
 - [ ] done sound (cling)  
 
 ### In Progress
@@ -19,6 +21,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Delete task  
 - [x] Task Order  
 - [x] BE: update task title  
 - [x] mutate on create task  

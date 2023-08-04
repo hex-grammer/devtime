@@ -65,7 +65,7 @@ export const TaskMutationProvider: React.FC<TaskMutationProviderProps> = ({
 
   const deleteTask = (projectId: string, taskId: string) => {
     axios
-      .delete(`/api/task/delete/${taskId}`)
+      .delete(`/api/task/delete?taskId=${taskId}`)
       .then(async () => {
         await mutate(`/api/task/get-all?projectId=${projectId}`);
       })
