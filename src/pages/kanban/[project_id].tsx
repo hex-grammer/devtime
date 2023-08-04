@@ -1,7 +1,10 @@
+import { useUser } from "@clerk/nextjs";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiArrowLeft } from "react-icons/fi";
+import useSWR from "swr";
 import KanbanSection from "~/components/KanbanSection";
 import StatsDetail from "~/components/StatsDetail";
 import { useTaskContext } from "~/context/AppContext";
@@ -120,21 +123,21 @@ const PROJECTS: Project = {
   ],
 };
 
+const fetcher = async (url: string) => {
+  const response = await axios.get(url);
+  return response.data as Project;
+};
+
 const KanbanPage: React.FC = () => {
   const router = useRouter();
+  const { user } = useUser();
   const { setIsCreateNewTask } = useTaskContext();
-  const { project_id } = router.query;
-  const [projectData, setprojectData] = useState<Project | null>(PROJECTS);
+  const { project_id } = router.query as { project_id: string };
 
-  //  wait 2 seconds before setting the project data
-  setTimeout(() => {
-    setprojectData(PROJECTS);
-  }, 0);
-
-  // log project_id in useEffect
-  useEffect(() => {
-    console.log(project_id);
-  }, [project_id]);
+  const { data: projectData } = useSWR<Project>(
+    `/api/task/get-all?userId=${user?.id}&projectId=${project_id}`,
+    fetcher
+  );
 
   if (!projectData) {
     return <div>Loading...</div>;

@@ -6,6 +6,8 @@ Project Description
 
 ### Todo
 
+- [ ] BE: create new task  
+- [ ] Loading indicator on page change  
 - [ ] Actions Functionality  
 - [ ] Rename Project by click the title  
 - [ ] Drag and drop  
@@ -13,10 +15,11 @@ Project Description
 
 ### In Progress
 
-- [ ] FE/BE: create new project  
 
 ### Done ✓
 
+- [x] BE: read tasks  
+- [x] FE/BE: create new project  
 - [x] project card skeleton  
 - [x] BE: read projects  
 - [x] Insert dummy data to db  
