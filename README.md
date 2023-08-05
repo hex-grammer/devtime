@@ -1,28 +1,99 @@
-# Create T3 App
+# DevTime
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Welcome to DevTime, a project management and time tracking tool for developers!
 
-## What's next? How do I make an app with this?
+## Table of Contents
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Usage](#usage)
+- [Environment Variables](#environment-variables)
+- [Demo](#demo)
+- [Contributing](#contributing)
+- [License](#license)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Features
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- Create and manage projects.
+- Organize tasks and subtasks using a Kanban board.
+- Track working hours for tasks and subtasks.
+- User authentication and authorization with Clerk.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Getting Started
 
-## Learn More
+### Prerequisites
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- Node.js (>=14.0.0)
+- npm or yarn
+- Prisma CLI (for database migrations)
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Installation
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+1. Clone the repository:
 
-## How do I deploy this?
+```bash
+git clone https://github.com/hex-grammer/devtime.git
+cd devtime
+```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up your MySQL database and update the `.env` file:
+
+```
+DATABASE_URL=mysql://user:password@host:port/database
+```
+
+Replace `user`, `password`, `host`, `port`, and `database` with your MySQL database credentials.
+
+4. Set up Clerk authentication by adding the following environment variables to `.env.local`:
+
+```dotenv
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_publishable_key_here
+CLERK_SECRET_KEY=your_secret_key_here
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+```
+
+### Usage
+
+1. Start the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+2. Open your browser and navigate to `http://localhost:3000` to access the application.
+
+## Environment Variables
+
+- `DATABASE_URL`: URL of your MySQL database.
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`: Publishable key from Clerk.
+- `CLERK_SECRET_KEY`: Secret key from Clerk.
+- `NEXT_PUBLIC_CLERK_SIGN_IN_URL`: URL for signing in with Clerk.
+- `NEXT_PUBLIC_CLERK_SIGN_UP_URL`: URL for signing up with Clerk.
+- `NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL`: URL to redirect after signing in.
+- `NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL`: URL to redirect after signing up.
+
+## Demo
+
+Check out the live demo of DevTime at [devtime.rizaltsx.com](https://devtime.rizaltsx.com).
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues and pull requests.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

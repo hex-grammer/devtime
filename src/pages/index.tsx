@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import useSWR, { mutate } from "swr";
