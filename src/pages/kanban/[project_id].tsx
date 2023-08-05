@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiArrowLeft } from "react-icons/fi";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import KanbanSection from "~/components/KanbanSection";
 import StatsDetail from "~/components/StatsDetail";
 import { useTaskContext, useTaskLoadingContext } from "~/context/AppContext";
@@ -19,6 +20,8 @@ const KanbanPage: React.FC = () => {
   const { setIsCreateNewTask } = useTaskContext();
   const { setIsTaskLoading } = useTaskLoadingContext();
   const { project_id } = router.query as { project_id: string };
+  const [editTitle, setEditTitle] = useState(false);
+  const [newProjectTitle, setNewProjectTitle] = useState("");
 
   const { data: projectData } = useSWR<Project>(
     `/api/task/get-all?projectId=${project_id}`,
@@ -31,11 +34,32 @@ const KanbanPage: React.FC = () => {
     setIsTaskLoading(false);
   }
 
+  useEffect(() => {
+    projectData && setNewProjectTitle(projectData.title);
+  }, []);
+
   const tasks: Task[] = projectData?.tasks ?? [];
 
   const todoTasks = tasks.filter((task) => task.step === "TODO");
   const inProgressTasks = tasks.filter((task) => task.step === "IN_PROGRESS");
   const doneTasks = tasks.filter((task) => task.step === "DONE");
+
+  const handleEditTitle = async () => {
+    // return if task title is empty
+    if (!newProjectTitle) {
+      return setEditTitle(false);
+    }
+
+    // create a new task
+    await axios.post("/api/project/update-title", {
+      projectId: projectData?.id,
+      newTitle: newProjectTitle,
+    });
+
+    await mutate(`/api/task/get-all?projectId=${project_id}`);
+
+    setEditTitle(false);
+  };
 
   return (
     <main className="min-h-screen bg-gray-800">
@@ -49,7 +73,26 @@ const KanbanPage: React.FC = () => {
             <FiArrowLeft />
           </button>
           <h2 className="flex-1 text-2xl font-bold text-gray-200">
-            {projectData?.title}
+            {editTitle ? (
+              <input
+                type="text"
+                className="m-0 truncate border-b bg-gray-800 text-left text-gray-200 outline-none"
+                value={newProjectTitle}
+                onChange={(e) => setNewProjectTitle(e.target.value)}
+                onBlur={() => void handleEditTitle()}
+                onKeyDown={(event) =>
+                  event.key === "Enter" && void handleEditTitle()
+                }
+                autoFocus
+              />
+            ) : (
+              <div
+                className="w-full cursor-pointer truncate"
+                onClick={() => setEditTitle(true)}
+              >
+                {projectData?.title}
+              </div>
+            )}
           </h2>
         </div>
         <button

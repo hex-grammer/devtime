@@ -102,10 +102,10 @@ export default function Home() {
             <div key={index} className="group relative">
               <ProjectCard project={project} />
               <button
-                className="absolute right-5 top-5 hidden scale-0 rounded-full bg-red-500 p-1 transition-all duration-75 hover:bg-red-600 group-hover:block group-hover:scale-125"
+                className="absolute right-5 top-5 hidden scale-0 rounded-full bg-red-500 p-1.5 transition-all duration-75 hover:bg-red-600 group-hover:block group-hover:scale-125"
                 onClick={() => void handleDelete(project.id)}
               >
-                <RiDeleteBin6Line className="text-white" />
+                <RiDeleteBin6Line className="text-xs text-white" />
               </button>
             </div>
           ))
