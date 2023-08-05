@@ -36,6 +36,7 @@ const KanbanPage: React.FC = () => {
 
   useEffect(() => {
     projectData && setNewProjectTitle(projectData.title);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tasks: Task[] = projectData?.tasks ?? [];

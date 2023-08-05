@@ -23,6 +23,7 @@ Project Description
 
 ### Done ✓
 
+- [x] confirm on delete project  
 - [x] put on top on progress change  
 - [x] Rename Project by click the title  
 - [x] Remove Project  

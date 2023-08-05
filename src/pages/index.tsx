@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import useSWR, { mutate } from "swr";
@@ -9,6 +9,10 @@ import Search from "~/components/Search";
 import type { Project } from "~/utils/types";
 import { AiOutlinePlus } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { Modal } from "antd";
+
+const { confirm } = Modal;
 
 const fetcher = (url: string) =>
   axios.get(url).then((res) => res.data as Project[]);
@@ -66,6 +70,23 @@ export default function Home() {
     }
   };
 
+  const showDeleteConfirm = (title: string, projectId: string) => {
+    confirm({
+      title: "Delete project",
+      icon: <ExclamationCircleFilled />,
+      content: `Are you sure delete '${title}'?`,
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        void handleDelete(projectId);
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
+
   return (
     <main className="min-h-screen bg-gray-800">
       {/* Header Section */}
@@ -103,7 +124,7 @@ export default function Home() {
               <ProjectCard project={project} />
               <button
                 className="absolute right-5 top-5 hidden scale-0 rounded-full bg-red-500 p-1.5 transition-all duration-75 hover:bg-red-600 group-hover:block group-hover:scale-125"
-                onClick={() => void handleDelete(project.id)}
+                onClick={() => showDeleteConfirm(project.title, project.id)}
               >
                 <RiDeleteBin6Line className="text-xs text-white" />
               </button>
