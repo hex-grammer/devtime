@@ -6,6 +6,7 @@ Project Description
 
 ### Todo
 
+- [ ] Integrate nextseo  
 - [ ] Publish V1.0  
 - [ ] Update task order  
 - [ ] Count day spent  
@@ -23,6 +24,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Sign-in & sign-up page design  
 - [x] Online database  
 - [x] Setup Readme file  
 - [x] confirm on delete project  
