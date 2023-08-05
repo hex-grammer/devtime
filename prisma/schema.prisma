@@ -15,7 +15,7 @@ model project {
     tasks           task[]
     progressUpdates taskprogress[]
 
-    @@map("Project")
+    @@map("project")
 }
 
 model task {
@@ -29,7 +29,7 @@ model task {
     subtasks        subtask[]
     progressUpdates taskprogress[]
 
-    @@map("Task")
+    @@map("task")
 }
 
 model subtask {
@@ -41,7 +41,7 @@ model subtask {
     working_hours Int     @default(0)
     task          task    @relation(fields: [task_id], references: [id], onDelete: Cascade)
 
-    @@map("Subtask")
+    @@map("subtask")
 }
 
 model taskprogress {
@@ -54,5 +54,5 @@ model taskprogress {
     project    project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
 
     @@unique([date, project_id, task_id])
-    @@map("TaskProgress")
+    @@map("taskprogress")
 }
