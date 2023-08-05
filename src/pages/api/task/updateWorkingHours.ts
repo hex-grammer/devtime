@@ -22,7 +22,7 @@ export default async function handler(
       data: { working_hours: workingHours },
     });
 
-    console.log("updatedTask:", updatedTask);
+    // console.log("updatedTask:", updatedTask);
     res.status(200).json(updatedTask);
   } catch (error) {
     console.error("Error updating task:", error);

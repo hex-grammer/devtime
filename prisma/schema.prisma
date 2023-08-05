@@ -23,7 +23,7 @@ model Task {
     step            String
     working_hours   Int            @default(0)
     order           Float          @default(0)
-    project         Project        @relation(fields: [project_id], references: [id])
+    project         Project        @relation(fields: [project_id], references: [id], onDelete: Cascade)
     subtasks        Subtask[]
     progressUpdates TaskProgress[]
 }
@@ -35,7 +35,7 @@ model Subtask {
     is_done       Boolean @default(false)
     order         Float   @default(0)
     working_hours Int     @default(0)
-    task          Task    @relation(fields: [task_id], references: [id])
+    task          Task    @relation(fields: [task_id], references: [id], onDelete: Cascade)
 }
 
 model TaskProgress {
@@ -44,8 +44,8 @@ model TaskProgress {
     project_id String
     task_id    String
     completed  Boolean
-    task       Task     @relation(fields: [task_id], references: [id])
-    project    Project  @relation(fields: [project_id], references: [id])
+    task       Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
+    project    Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
 
     @@unique([date, project_id, task_id])
 }

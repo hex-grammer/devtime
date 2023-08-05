@@ -8,6 +8,7 @@ import ProjectSkeleton from "~/components/ProjectSkeleton";
 import Search from "~/components/Search";
 import type { Project } from "~/utils/types";
 import { AiOutlinePlus } from "react-icons/ai";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 const fetcher = (url: string) =>
   axios.get(url).then((res) => res.data as Project[]);
@@ -53,6 +54,18 @@ export default function Home() {
     }
   };
 
+  const handleDelete = async (projectId: string) => {
+    console.log("Clicked delete button");
+    try {
+      // Make an axios POST request to the API endpoint
+      await axios.delete(`/api/project/delete?id=${projectId}`);
+      await mutate(`/api/project/getByUserId?userId=${user?.id ?? ""}`);
+    } catch (error) {
+      console.error(error);
+      // Handle error here (e.g., show an error message)
+    }
+  };
+
   return (
     <main className="min-h-screen bg-gray-800">
       {/* Header Section */}
@@ -86,7 +99,15 @@ export default function Home() {
       <div className="grid gap-4 px-4 py-4 sm:grid-cols-3 sm:px-32 md:grid-cols-4">
         {projects ? (
           projects.map((project, index) => (
-            <ProjectCard key={index} project={project} />
+            <div key={index} className="group relative">
+              <ProjectCard project={project} />
+              <button
+                className="absolute right-5 top-5 hidden scale-0 rounded-full bg-red-500 p-1 transition-all duration-75 hover:bg-red-600 group-hover:block group-hover:scale-125"
+                onClick={() => void handleDelete(project.id)}
+              >
+                <RiDeleteBin6Line className="text-white" />
+              </button>
+            </div>
           ))
         ) : (
           <ProjectSkeleton number={4} />

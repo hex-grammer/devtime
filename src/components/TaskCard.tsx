@@ -155,7 +155,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
               autoFocus
             />
           ) : (
-            <div className="w-full cursor-pointer" onClick={handleRename}>
+            <div
+              className="w-full cursor-pointer truncate"
+              onClick={handleRename}
+            >
               {taskTitle}
             </div>
           )}

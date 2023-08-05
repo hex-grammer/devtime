@@ -6,13 +6,15 @@ Project Description
 
 ### Todo
 
+- [ ] Rename Project by click the title  
+- [ ] Update order  
+- [ ] Publish V1.0  
 - [ ] put on top on progress change  
 - [ ] Time tracking  
 - [ ] Create SubTask  
 - [ ] Delete subtask  
 - [ ] Stats Value  
 - [ ] Loading indicator on page change  
-- [ ] Rename Project by click the title  
 - [ ] Drag and drop  
 - [ ] Add toastify  
 - [ ] done sound (cling)  
@@ -22,6 +24,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Remove Project  
 - [x] tracking working hours  
 - [x] Task Actions functionality  
 - [x] Delete task  

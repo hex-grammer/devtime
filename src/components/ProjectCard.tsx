@@ -16,7 +16,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
   return (
     <Link href={`/kanban/${id}`}>
-      <div className="cursor-pointer rounded-lg border-gray-500 bg-gray-900 p-4 shadow-md hover:border hover:bg-gray-950">
+      <div className="cursor-pointer rounded-lg border-gray-500 bg-gray-900 p-4 shadow-md hover:bg-gray-950">
         {/* Title and Percentage */}
         <div className="mb-2 flex gap-2">
           <h2 className="flex-1 truncate text-lg font-bold text-gray-200">
