@@ -1,9 +1,12 @@
 import React, { useState, createContext, useContext } from "react";
+import { type Task } from "~/utils/types";
 
 // Define the type
 interface TaskContextType {
   isCreateNewTask: boolean;
   setIsCreateNewTask: React.Dispatch<React.SetStateAction<boolean>>;
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
 interface TaskLoadingContextType {
@@ -51,6 +54,8 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   const taskValue: TaskContextType = {
     isCreateNewTask,
     setIsCreateNewTask,
+    tasks: [],
+    setTasks: () => [],
   };
 
   return (

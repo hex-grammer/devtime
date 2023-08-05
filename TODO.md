@@ -6,8 +6,10 @@ Project Description
 
 ### Todo
 
-- [ ] Integrate nextseo  
+- [ ] Faster when add new task  
+- [ ] Loading indicators  
 - [ ] Publish V1.0  
+- [ ] Integrate nextseo  
 - [ ] Update task order  
 - [ ] Count day spent  
 - [ ] Time tracking  

@@ -2,7 +2,7 @@ import React from "react";
 import type { Project } from "~/utils/types";
 import Link from "next/link";
 import ProgressCircle from "./ProgressCircle";
-import { formatAverage, formatWorkingHours } from "~/utils/utils";
+import { formatAverage, formatTime, formatWorkingHours } from "~/utils/utils";
 
 interface ProjectCardProps {
   project: Project; // Pass the entire project object as a prop
@@ -28,7 +28,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <div className="mb-2">
           <p className="text-xs text-gray-500">Working Hours</p>
           <div className="text-4xl font-bold text-blue-600">
-            {formatWorkingHours(working_hours)}
+            {formatTime(working_hours)}
           </div>
         </div>
         <div className="flex gap-4">
@@ -39,7 +39,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           <div className="">
             <p className="text-xs text-gray-500">Avg. (per day)</p>
             <div className="text-xl text-gray-400">
-              {formatAverage(averagePerDay)}
+              {formatTime(averagePerDay)}
             </div>
           </div>
         </div>
