@@ -6,10 +6,9 @@ Project Description
 
 ### Todo
 
-- [ ] Update task order  
 - [ ] Publish V1.0  
+- [ ] Update task order  
 - [ ] Count day spent  
-- [ ] put on top on progress change  
 - [ ] Time tracking  
 - [ ] Create SubTask  
 - [ ] Delete subtask  
@@ -24,6 +23,7 @@ Project Description
 
 ### Done ✓
 
+- [x] put on top on progress change  
 - [x] Rename Project by click the title  
 - [x] Remove Project  
 - [x] tracking working hours  

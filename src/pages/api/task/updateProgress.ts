@@ -16,6 +16,19 @@ export default async function handler(
     progress: "TODO" | "IN_PROGRESS" | "DONE";
   };
 
+  // get the lowest order number for the task with the given progress
+  const lowestOrderNumber = await prisma.task.findFirst({
+    where: {
+      step: progress,
+    },
+    orderBy: {
+      order: "asc",
+    },
+    select: {
+      order: true,
+    },
+  });
+
   try {
     const task = await prisma.task.update({
       where: {
@@ -23,6 +36,7 @@ export default async function handler(
       },
       data: {
         step: progress,
+        order: lowestOrderNumber ? lowestOrderNumber.order - 1 : 0,
       },
     });
 
