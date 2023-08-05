@@ -23,6 +23,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Online database  
 - [x] Setup Readme file  
 - [x] confirm on delete project  
 - [x] put on top on progress change  

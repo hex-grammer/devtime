@@ -7,45 +7,52 @@ generator client {
     provider = "prisma-client-js"
 }
 
-model Project {
+model project {
     id              String         @id @default(uuid())
     user_id         String
     title           String
     started_at      DateTime       @default(now())
-    tasks           Task[]
-    progressUpdates TaskProgress[]
+    tasks           task[]
+    progressUpdates taskprogress[]
+
+    @@map("Project")
 }
 
-model Task {
+model task {
     id              String         @id @default(uuid())
     project_id      String
     title           String
     step            String
     working_hours   Int            @default(0)
     order           Float          @default(0)
-    project         Project        @relation(fields: [project_id], references: [id], onDelete: Cascade)
-    subtasks        Subtask[]
-    progressUpdates TaskProgress[]
+    project         project        @relation(fields: [project_id], references: [id], onDelete: Cascade)
+    subtasks        subtask[]
+    progressUpdates taskprogress[]
+
+    @@map("Task")
 }
 
-model Subtask {
+model subtask {
     id            String  @id @default(uuid())
     task_id       String
     title         String
     is_done       Boolean @default(false)
     order         Float   @default(0)
     working_hours Int     @default(0)
-    task          Task    @relation(fields: [task_id], references: [id], onDelete: Cascade)
+    task          task    @relation(fields: [task_id], references: [id], onDelete: Cascade)
+
+    @@map("Subtask")
 }
 
-model TaskProgress {
+model taskprogress {
     id         String   @id @default(uuid())
     date       DateTime
     project_id String
     task_id    String
     completed  Boolean
-    task       Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
-    project    Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+    task       task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
+    project    project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
 
     @@unique([date, project_id, task_id])
+    @@map("TaskProgress")
 }
