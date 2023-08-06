@@ -1,8 +1,9 @@
 import { AiOutlinePlus } from "react-icons/ai";
 import { useState } from "react";
-import { useTaskContext } from "~/context/AppContext";
 import { useTaskMutationContext } from "~/context/TaskMutationContext";
-// import { mutate } from "swr";
+import { useGetTasksContext } from "~/context/GetTaskContext";
+import { useCreateTasksContext } from "~/context/CreateTaskContext";
+import { createNewTask } from "~/utils/utils";
 
 interface NewTaskButtonProps {
   isActive?: boolean;
@@ -17,7 +18,8 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
 }) => {
   const [editing, setEditing] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
-  const { setIsCreateNewTask } = useTaskContext();
+  const { setIsCreateNewTask } = useCreateTasksContext();
+  const { setTasks } = useGetTasksContext();
   const taskMutation = useTaskMutationContext();
 
   const handleButtonClick = () => {
@@ -34,6 +36,7 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
     }
 
     // create a new task
+    setTasks((prevTasks) => createNewTask(prevTasks, taskTitle, order));
     taskMutation.createNewTask(projectId, taskTitle, order);
 
     setTaskTitle("");

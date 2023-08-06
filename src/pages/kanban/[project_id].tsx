@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiArrowLeft } from "react-icons/fi";
 import useSWR, { mutate } from "swr";
-import KanbanSection from "~/components/KanbanSection";
+import KanbanList from "~/components/KanbanList";
 import StatsDetail from "~/components/StatsDetail";
-import { useTaskContext, useTaskLoadingContext } from "~/context/AppContext";
+import { useCreateTasksContext } from "~/context/CreateTaskContext";
 import { TaskMutationProvider } from "~/context/TaskMutationContext";
-import type { Project, Task } from "~/utils/types";
+import type { Project } from "~/utils/types";
 
 const fetcher = async (url: string) => {
   const response = await axios.get(url);
@@ -17,12 +17,10 @@ const fetcher = async (url: string) => {
 
 const KanbanPage: React.FC = () => {
   const router = useRouter();
-  const { setIsCreateNewTask } = useTaskContext();
-  const { setIsTaskLoading } = useTaskLoadingContext();
   const { project_id } = router.query as { project_id: string };
+  const { setIsTaskLoading, setIsCreateNewTask } = useCreateTasksContext();
   const [editTitle, setEditTitle] = useState(false);
   const [newProjectTitle, setNewProjectTitle] = useState("");
-
   const { data: projectData } = useSWR<Project>(
     `/api/task/get-all?projectId=${project_id}`,
     fetcher
@@ -34,16 +32,19 @@ const KanbanPage: React.FC = () => {
     setIsTaskLoading(false);
   }
 
+  // when project data change
+  // setTasks(projectData?.tasks ?? []);
+  // useEffect(() => {
+  //   setTasks(projectData?.tasks ?? []);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [projectData]);
+
   useEffect(() => {
     projectData && setNewProjectTitle(projectData.title);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const tasks: Task[] = projectData?.tasks ?? [];
-
-  const todoTasks = tasks.filter((task) => task.step === "TODO");
-  const inProgressTasks = tasks.filter((task) => task.step === "IN_PROGRESS");
-  const doneTasks = tasks.filter((task) => task.step === "DONE");
+  // const tasks: Task[] = projectData?.tasks ?? [];
 
   const handleEditTitle = async () => {
     // return if task title is empty
@@ -61,6 +62,10 @@ const KanbanPage: React.FC = () => {
 
     setEditTitle(false);
   };
+
+  if (!projectData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
@@ -107,25 +112,9 @@ const KanbanPage: React.FC = () => {
       {/* Kanban */}
       <TaskMutationProvider>
         <div className="grid gap-4 px-4 py-4 sm:grid-cols-4 sm:px-32">
-          {/* TODO */}
-          <KanbanSection
-            projectId={projectData?.id ?? ""}
-            title="TO DO"
-            tasks={todoTasks}
-          />
-
-          {/* IN_PROGRESS */}
-          <KanbanSection
-            projectId={projectData?.id ?? ""}
-            title="IN PROGRESS"
-            tasks={inProgressTasks}
-          />
-
-          {/* DONE */}
-          <KanbanSection
-            projectId={projectData?.id ?? ""}
-            title="DONE"
-            tasks={doneTasks}
+          <KanbanList
+            projectId={project_id}
+            initialTasks={projectData?.tasks ?? []}
           />
 
           {/* STATS */}

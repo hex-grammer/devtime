@@ -5,10 +5,11 @@ import TaskActions from "./TaskActions";
 import { LuCheckSquare, LuPause, LuPlay } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { LiaEdit } from "react-icons/lia";
-import getMenuItemsByStep, { formatTime } from "~/utils/utils";
+import getMenuItemsByStep, { formatTime, updateStep } from "~/utils/utils";
 import { useTaskMutationContext } from "~/context/TaskMutationContext";
 import { NewSubtaskProvider } from "~/context/NewSubtaskContext";
 import { GiSandsOfTime } from "react-icons/gi";
+import { useGetTasksContext } from "~/context/GetTaskContext";
 
 interface TaskCardProps {
   task: Task;
@@ -20,19 +21,18 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   const [taskTitle, setTaskTitle] = useState<string>(task.title);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const taskMutation = useTaskMutationContext();
-  const [timer, setTimer] = useState(0);
+  const { tasks, setTasks } = useGetTasksContext();
 
   // send request every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       if (task.step === "IN_PROGRESS") {
-        setTimer((timer) => {
-          taskMutation.updateWorkingHours(
-            projectId,
-            task.id,
-            task.working_hours + (timer + 1)
-          );
-          return timer;
+        setTasks((t) => {
+          const newWH = t.find(
+            (thisTask) => thisTask.id === task.id
+          )!.working_hours;
+          taskMutation.updateWorkingHours(projectId, task.id, newWH);
+          return t;
         });
       }
     }, 10000);
@@ -44,30 +44,45 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (task.step === "IN_PROGRESS") {
-        setTimer((timer) => timer + 1);
+        setTasks((prevTasks) =>
+          prevTasks.map((prevTask) =>
+            prevTask.id === task.id
+              ? {
+                  ...prevTask,
+                  working_hours: prevTask.working_hours + 1,
+                }
+              : prevTask
+          )
+        );
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [task.step]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleRename = () => {
     setEditing(true);
-    console.log("Rename clicked");
   };
 
   const handlePlay = () => {
+    setTasks((prevTasks) => updateStep(prevTasks, task.id, "IN_PROGRESS"));
     taskMutation.updateProgress(projectId, task.id, "IN_PROGRESS");
   };
 
   const handlePause = () => {
+    setTasks((prevTasks) => updateStep(prevTasks, task.id, "TODO"));
     taskMutation.updateProgress(projectId, task.id, "TODO");
   };
 
   const handleFinish = () => {
+    setTasks((prevTasks) => updateStep(prevTasks, task.id, "DONE"));
     taskMutation.updateProgress(projectId, task.id, "DONE");
   };
 
   const handleDelete = () => {
+    setTasks((prevTasks) =>
+      prevTasks.filter((prevTask) => prevTask.id !== task.id)
+    );
     taskMutation.deleteTask(projectId, task.id);
   };
 
@@ -166,7 +181,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
             <span className="whitespace-nowrap font-normal text-gray-400">
               {task.step === "IN_PROGRESS" ? (
                 <div className="flex items-center gap-1">
-                  {formatTime(task.working_hours + (timer % 10))}
+                  {formatTime(
+                    tasks.find((thisTask) => thisTask.id === task.id)
+                      ?.working_hours ?? 0
+                  )}
                   <div className="relative">
                     <GiSandsOfTime className="absolute left-0 top-0 animate-ping text-xs text-blue-500 duration-500" />
                     <GiSandsOfTime className="text-xs text-blue-500" />
@@ -189,15 +207,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
         {task.subtasks.map((subtask) => (
           <SubtaskCard key={subtask.id} subtask={subtask} />
         ))}
-        {/* <NewSubtask
-          subtask={{
-            id: "new",
-            task_id: task.id,
-            title: "",
-            is_done: false,
-            working_hours: 54336,
-          }}
-        /> */}
       </div>
     </NewSubtaskProvider>
   );

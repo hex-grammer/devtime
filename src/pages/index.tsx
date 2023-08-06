@@ -120,15 +120,15 @@ export default function Home() {
       <div className="grid gap-4 px-4 py-4 sm:grid-cols-3 sm:px-32 md:grid-cols-4">
         {projects ? (
           projects.map((project, index) => (
-            <div key={index} className="group relative">
-              <ProjectCard project={project} />
-              <button
-                className="absolute right-5 top-5 hidden scale-0 rounded-full bg-red-500 p-1.5 transition-all duration-75 hover:bg-red-600 group-hover:block group-hover:scale-125"
-                onClick={() => showDeleteConfirm(project.title, project.id)}
-              >
-                <RiDeleteBin6Line className="text-xs text-white" />
-              </button>
-            </div>
+              <div key={index} className="group relative">
+                <ProjectCard project={project} />
+                <button
+                  className="absolute right-5 top-5 hidden scale-0 rounded-full bg-red-500 p-1.5 transition-all duration-75 hover:bg-red-600 group-hover:block group-hover:scale-125"
+                  onClick={() => showDeleteConfirm(project.title, project.id)}
+                >
+                  <RiDeleteBin6Line className="text-xs text-white" />
+                </button>
+              </div>
           ))
         ) : (
           <ProjectSkeleton number={4} />

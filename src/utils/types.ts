@@ -19,6 +19,7 @@ export interface Task {
   step: Progress;
   working_hours: number; // Working hours spent on the task (in seconds)
   subtasks: Subtask[];
+  order: number;
   lastProgress: string | null; // ISO date string or null if never moved to "IN_PROGRESS"
 }
 
