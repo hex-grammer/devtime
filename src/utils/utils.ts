@@ -69,12 +69,14 @@ export const createNewTask = (
   taskTitle: string,
   order: string
 ): Task[] => {
-  const smallest = prevTasks.reduce((acc, curr) =>
-    acc.order < curr.order ? acc : curr
-  );
-  const biggest = prevTasks.reduce((acc, curr) =>
-    acc.order > curr.order ? acc : curr
-  );
+  const smallest =
+    prevTasks.length === 0
+      ? { order: 0 }
+      : prevTasks.reduce((acc, curr) => (acc.order < curr.order ? acc : curr));
+  const biggest =
+    prevTasks.length === 0
+      ? { order: 0 }
+      : prevTasks.reduce((acc, curr) => (acc.order > curr.order ? acc : curr));
   const newOrder = order === "first" ? smallest.order - 1 : biggest.order + 1;
   return [
     ...prevTasks,
@@ -104,10 +106,13 @@ export const updateStep = (
 
   // Find the smallest order value among existing tasks
   const tasksWithSameStep = prevTasks.filter((task) => task.step === step);
-  const smallestOrder = tasksWithSameStep.reduce(
-    (minOrder, task) => Math.min(minOrder, task.order),
-    Number.MAX_SAFE_INTEGER
-  );
+  const smallestOrder =
+    tasksWithSameStep.length === 0
+      ? 0
+      : tasksWithSameStep.reduce(
+          (minOrder, task) => Math.min(minOrder, task.order),
+          Number.MAX_SAFE_INTEGER
+        );
 
   // Update the step of the task with the specified taskId
   const updatedTask: Task = {
