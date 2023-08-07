@@ -104,6 +104,7 @@ export const TaskMutationProvider: React.FC<TaskMutationProviderProps> = ({
     taskId: string,
     workingHours: number
   ) => {
+    console.log(taskId, workingHours);
     axios
       .put(`/api/task/updateWorkingHours`, { taskId, workingHours })
       .then(async () => {

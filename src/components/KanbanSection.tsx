@@ -15,8 +15,7 @@ const KanbanSection: React.FC<KanbanSectionProps> = ({
   tasks,
   projectId,
 }) => {
-  const { isCreateNewTask } = useCreateTasksContext();
-  // const { isTaskLoading } = useTaskLoadingContext();
+  const { isCreateNewTask, isTaskLoading } = useCreateTasksContext();
 
   return (
     <div className="rounded-lg text-gray-100">
@@ -24,11 +23,11 @@ const KanbanSection: React.FC<KanbanSectionProps> = ({
         {title}
       </h3>
       {/* skeleton if isTaskLoading */}
-      {/* {isTaskLoading && (
+      {isTaskLoading && (
         <div className="animate-pulse">
           <div className="mb-2 h-8 rounded-md bg-gray-700" />
         </div>
-      )} */}
+      )}
       {title === "TO DO" && isCreateNewTask && (
         <NewTaskButton isActive projectId={projectId} order="first" />
       )}

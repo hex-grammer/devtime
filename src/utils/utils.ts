@@ -43,7 +43,7 @@ export const formatTime = (seconds: number): string => {
     return `${hours}h ${minutes}m`;
   }
 
-  return `${minutes}m ${remSec}s`;
+  return `${minutes}m`;
 };
 
 export const formatDate = (dateString: string): string => {

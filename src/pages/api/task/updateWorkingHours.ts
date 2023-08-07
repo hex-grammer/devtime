@@ -16,6 +16,8 @@ export default async function handler(
     workingHours: number;
   };
 
+  console.log(taskId, workingHours);
+
   try {
     const updatedTask = await prisma.task.update({
       where: { id: taskId },

@@ -32,19 +32,10 @@ const KanbanPage: React.FC = () => {
     setIsTaskLoading(false);
   }
 
-  // when project data change
-  // setTasks(projectData?.tasks ?? []);
-  // useEffect(() => {
-  //   setTasks(projectData?.tasks ?? []);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [projectData]);
-
   useEffect(() => {
     projectData && setNewProjectTitle(projectData.title);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // const tasks: Task[] = projectData?.tasks ?? [];
 
   const handleEditTitle = async () => {
     // return if task title is empty
@@ -64,7 +55,9 @@ const KanbanPage: React.FC = () => {
   };
 
   if (!projectData) {
-    return <div>Loading...</div>;
+    setIsTaskLoading(true);
+  } else {
+    setIsTaskLoading(false);
   }
 
   return (

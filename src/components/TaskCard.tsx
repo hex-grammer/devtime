@@ -5,7 +5,11 @@ import TaskActions from "./TaskActions";
 import { LuCheckSquare, LuPause, LuPlay } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { LiaEdit } from "react-icons/lia";
-import getMenuItemsByStep, { formatTime, updateStep } from "~/utils/utils";
+import getMenuItemsByStep, {
+  formatTime,
+  formatWorkingHours,
+  updateStep,
+} from "~/utils/utils";
 import { useTaskMutationContext } from "~/context/TaskMutationContext";
 import { NewSubtaskProvider } from "~/context/NewSubtaskContext";
 import { GiSandsOfTime } from "react-icons/gi";
@@ -21,44 +25,40 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   const [taskTitle, setTaskTitle] = useState<string>(task.title);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const taskMutation = useTaskMutationContext();
+  const [timer, setTimer] = useState(0);
   const { tasks, setTasks } = useGetTasksContext();
 
-  // send request every 10 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (task.step === "IN_PROGRESS") {
-        setTasks((t) => {
-          const newWH = t.find(
-            (thisTask) => thisTask.id === task.id
-          )!.working_hours;
-          taskMutation.updateWorkingHours(projectId, task.id, newWH);
-          return t;
-        });
-      }
-    }, 10000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // timer every 1 second
   useEffect(() => {
     const interval = setInterval(() => {
       if (task.step === "IN_PROGRESS") {
         setTasks((prevTasks) =>
-          prevTasks.map((prevTask) =>
-            prevTask.id === task.id
-              ? {
-                  ...prevTask,
-                  working_hours: prevTask.working_hours + 1,
-                }
-              : prevTask
-          )
+          prevTasks.map((prevTask) => {
+            if (prevTask.id === task.id) {
+              const newWorkingHours = prevTask.working_hours + 1;
+
+              if (timer % 10 === 0) {
+                taskMutation.updateWorkingHours(
+                  projectId,
+                  task.id,
+                  newWorkingHours
+                );
+              }
+
+              return {
+                ...prevTask,
+                working_hours: newWorkingHours,
+              };
+            }
+            return prevTask;
+          })
         );
+
+        setTimer((prevTimer) => prevTimer + 1);
       }
     }, 1000);
+
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [task, tasks, setTasks, timer, taskMutation, projectId]);
 
   const handleRename = () => {
     setEditing(true);
@@ -181,7 +181,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
             <span className="whitespace-nowrap font-normal text-gray-400">
               {task.step === "IN_PROGRESS" ? (
                 <div className="flex items-center gap-1">
-                  {formatTime(
+                  {formatWorkingHours(
                     tasks.find((thisTask) => thisTask.id === task.id)
                       ?.working_hours ?? 0
                   )}
