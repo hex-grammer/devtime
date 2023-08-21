@@ -42,24 +42,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
     setEditing(true);
   };
 
-  // const handlePlay = () => {
-  //   setTasks((prevTasks) => {
-  //     const order = getOrder(prevTasks, "IN_PROGRESS");
-  //     taskMutation.updateProgress(projectId, task.id, "IN_PROGRESS", order);
-  //     return updateStep(prevTasks, task.id, "IN_PROGRESS")
-  //   });
-  // };
-
-  // const handlePause = () => {
-  //   taskMutation.updateProgress(projectId, task.id, "TODO");
-  //   setTasks((prevTasks) => updateStep(prevTasks, task.id, "TODO"));
-  // };
-
-  // const handleFinish = () => {
-  //   taskMutation.updateProgress(projectId, task.id, "DONE");
-  //   setTasks((prevTasks) => updateStep(prevTasks, task.id, "DONE"));
-  // };
-
   const setStepTo = (step: "TODO" | "IN_PROGRESS" | "DONE") => {
     setTasks((prevTasks) => {
       const order = getOrder(prevTasks, step);

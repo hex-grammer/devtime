@@ -42,36 +42,40 @@ export default async function handler(
       });
 
       // Calculate accumulated working_hours from related tasks for each project
-      const projectsWithAccumulatedWorkingHours = projects.map((project) => {
-        const completedTasks = project.tasks.filter(
-          (task) => task.step === "DONE"
-        ).length;
-        const progress = project.tasks.length
-          ? Math.floor((completedTasks / project.tasks.length) * 100)
-          : 0;
+      const projectsWithAccumulatedWorkingHours = projects
+        .map((project) => {
+          const completedTasks = project.tasks.filter(
+            (task) => task.step === "DONE"
+          ).length;
+          const progress = project.tasks.length
+            ? Math.floor((completedTasks / project.tasks.length) * 100)
+            : 0;
 
-        return {
-          id: project.id,
-          title: project.title,
-          working_hours: getWorkingHours(
-            project.taskprogress as TaskProgress[]
-          ),
-          started_at: project.started_at.toISOString(),
-          daySpent: getDaySpent(project.taskprogress as TaskProgress[]),
-          progress: progress,
-          numberOfTasks: project.tasks.length,
-          lastProgress:
-            project.taskprogress[0]?.start_date?.toISOString() ??
-            project.started_at.toISOString(),
-        };
-      });
+          const isInProgress =
+            project.tasks.filter((task) => task.step === "IN_PROGRESS").length >
+            0;
 
-      // Sort the projects by lastProgress in descending order (most recent first)
-      projectsWithAccumulatedWorkingHours.sort((a, b) => {
-        const dateA = new Date(a.lastProgress).getTime();
-        const dateB = new Date(b.lastProgress).getTime();
-        return dateB - dateA; // Sort in descending order
-      });
+          return {
+            id: project.id,
+            title: project.title,
+            working_hours: getWorkingHours(
+              project.taskprogress as TaskProgress[]
+            ),
+            started_at: project.started_at.toISOString(),
+            daySpent: getDaySpent(project.taskprogress as TaskProgress[]),
+            progress: progress,
+            isInProgress: isInProgress,
+            numberOfTasks: project.tasks.length,
+            lastProgress:
+              project.taskprogress[0]?.start_date?.toISOString() ??
+              project.started_at.toISOString(),
+          };
+        })
+        .sort((a, b) => {
+          const dateA = new Date(a.lastProgress).getTime();
+          const dateB = new Date(b.lastProgress).getTime();
+          return dateB - dateA; // Sort in descending order
+        });
 
       // Return the projects data with accumulated working_hours as the response
       res.status(200).json(projectsWithAccumulatedWorkingHours);

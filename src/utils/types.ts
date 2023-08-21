@@ -10,6 +10,7 @@ export interface Project {
   numberOfTasks?: number; // Optional number of tasks in the project
   lastProgress?: string | null; // ISO date string or null if no tasks in "IN_PROGRESS"
   tasks?: Task[]; // Optional array of tasks in the project
+  isInProgress?: boolean; // Optional boolean indicating if any task is in progress
 }
 
 export interface Task {
