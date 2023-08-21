@@ -27,9 +27,9 @@ export default async function handler(
               step: true,
             },
           },
-          progressUpdates: {
+          taskprogress: {
             orderBy: {
-              date: "desc",
+              start_date: "desc",
             },
             // take: 1,
           },
@@ -51,12 +51,14 @@ export default async function handler(
           0
         );
 
-        const latestProgress = project.progressUpdates[0];
+        const latestProgress = project.taskprogress[0];
 
         if (latestProgress) {
           const millisecondsPerDay = 24 * 60 * 60 * 1000;
           const startedAt = new Date(project.started_at).getTime();
-          const latestProgressDate = new Date(latestProgress.date).getTime();
+          const latestProgressDate = new Date(
+            latestProgress.start_date
+          ).getTime();
           const daySpent = Math.ceil(
             (latestProgressDate - startedAt) / millisecondsPerDay
           );
@@ -73,7 +75,10 @@ export default async function handler(
             daySpent: daySpent,
             progress: progress,
             numberOfTasks: project.tasks.length,
-            lastProgress: latestProgress.completed ? latestProgress.date : null,
+            lastProgress:
+              latestProgress.progress === "DONE"
+                ? latestProgress.start_date
+                : null,
           };
         } else {
           const progress = totalTasks
