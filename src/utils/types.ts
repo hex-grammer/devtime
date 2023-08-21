@@ -20,7 +20,7 @@ export interface Task {
   working_hours: number; // Working hours spent on the task (in seconds)
   subtasks: Subtask[];
   order: number;
-  lastProgress: string | null; // ISO date string or null if never moved to "IN_PROGRESS"
+  taskprogress: TaskProgress[];
 }
 
 export interface Subtask {
@@ -33,10 +33,11 @@ export interface Subtask {
 
 export interface TaskProgress {
   id: string;
-  date: string; // ISO date string
+  start_date: string; // ISO date string
+  stop_date: string; // ISO date string
   project_id: string;
   task_id: string;
-  completed: boolean;
+  progress: Progress;
 }
 
 export interface ProjectWithStats extends Project {

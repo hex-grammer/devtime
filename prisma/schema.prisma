@@ -1,58 +1,62 @@
-datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+generator client {
+  provider = "prisma-client-js"
 }
 
-generator client {
-    provider = "prisma-client-js"
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model project {
-    id              String         @id @default(uuid())
-    user_id         String
-    title           String
-    started_at      DateTime       @default(now())
-    tasks           task[]
-    progressUpdates taskprogress[]
+  id           String         @id @default(uuid())
+  user_id      String
+  title        String
+  started_at   DateTime       @default(now())
+  tasks        task[]
+  taskprogress taskprogress[]
 
-    @@map("project")
+  @@map("project")
 }
 
 model task {
-    id              String         @id @default(uuid())
-    project_id      String
-    title           String
-    step            String
-    working_hours   Int            @default(0)
-    order           Float          @default(0)
-    project         project        @relation(fields: [project_id], references: [id], onDelete: Cascade)
-    subtasks        subtask[]
-    progressUpdates taskprogress[]
+  id            String         @id @default(uuid())
+  project_id    String
+  title         String
+  step          String
+  working_hours Int            @default(0)
+  order         Float          @default(0)
+  subtasks      subtask[]
+  project       project        @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  taskprogress  taskprogress[]
 
-    @@map("task")
+  @@index([project_id], map: "task_project_id_fkey")
+  @@map("task")
 }
 
 model subtask {
-    id            String  @id @default(uuid())
-    task_id       String
-    title         String
-    is_done       Boolean @default(false)
-    order         Float   @default(0)
-    working_hours Int     @default(0)
-    task          task    @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  id            String  @id @default(uuid())
+  task_id       String
+  title         String
+  is_done       Boolean @default(false)
+  working_hours Int     @default(0)
+  order         Float   @default(0)
+  task          task    @relation(fields: [task_id], references: [id], onDelete: Cascade)
 
-    @@map("subtask")
+  @@index([task_id], map: "subtask_task_id_fkey")
+  @@map("subtask")
 }
 
 model taskprogress {
-    id         String   @id @default(uuid())
-    date       DateTime
-    project_id String
-    task_id    String
-    completed  Boolean
-    task       task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
-    project    project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  project_id String
+  task_id    String
+  progress   String
+  start_date DateTime @default(now())
+  stop_date  DateTime @default(now())
+  project    project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  task       task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
 
-    @@unique([date, project_id, task_id])
-    @@map("taskprogress")
+  @@index([project_id], map: "taskprogress_project_id_fkey")
+  @@index([task_id], map: "taskprogress_task_id_fkey")
+  @@map("taskprogress")
 }

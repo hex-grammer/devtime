@@ -47,10 +47,10 @@ export default async function handler(
       // Create a new task progress entry
       await prisma.taskprogress.create({
         data: {
-          date: new Date(), // Set the date to the current date
+          // date: new Date(), // Set the date to the current date
           project_id: task.project_id,
           task_id: taskId,
-          completed: false, // Set the completed status as needed
+          progress: progress,
         },
       });
     } else {
@@ -61,6 +61,18 @@ export default async function handler(
         },
         data: {
           step: progress,
+        },
+      });
+
+      // update the last task progress stop date to current date
+      await prisma.taskprogress.updateMany({
+        where: {
+          task_id: taskId,
+          progress: "IN_PROGRESS",
+        },
+        data: {
+          stop_date: new Date(),
+          progress: progress,
         },
       });
     }

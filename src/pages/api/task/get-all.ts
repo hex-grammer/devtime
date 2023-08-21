@@ -24,6 +24,13 @@ export default async function handler(
         tasks: {
           include: {
             subtasks: true,
+            taskprogress: {
+              select: {
+                progress: true,
+                start_date: true,
+                stop_date: true,
+              },
+            },
           },
           orderBy: {
             order: "asc",

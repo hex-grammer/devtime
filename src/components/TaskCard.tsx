@@ -6,6 +6,7 @@ import { LuCheckSquare, LuPause, LuPlay } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { LiaEdit } from "react-icons/lia";
 import getMenuItemsByStep, {
+  calculateAccumulatedDifference,
   formatTime,
   formatWorkingHours,
   updateStep,
@@ -14,6 +15,7 @@ import { useTaskMutationContext } from "~/context/TaskMutationContext";
 import { NewSubtaskProvider } from "~/context/NewSubtaskContext";
 import { GiSandsOfTime } from "react-icons/gi";
 import { useGetTasksContext } from "~/context/GetTaskContext";
+import { format } from "path";
 
 interface TaskCardProps {
   task: Task;
@@ -181,17 +183,26 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
             <span className="whitespace-nowrap font-normal text-gray-400">
               {task.step === "IN_PROGRESS" ? (
                 <div className="flex items-center gap-1">
-                  {formatWorkingHours(
+                  {/* {formatWorkingHours(
                     tasks.find((thisTask) => thisTask.id === task.id)
                       ?.working_hours ?? 0
-                  )}
+                  )} */}
+                  {task.taskprogress.length > 0
+                    ? formatTime(
+                        calculateAccumulatedDifference(task.taskprogress)
+                      )
+                    : "0s"}
                   <div className="relative">
                     <GiSandsOfTime className="absolute left-0 top-0 animate-ping text-xs text-blue-500 duration-500" />
                     <GiSandsOfTime className="text-xs text-blue-500" />
                   </div>
                 </div>
+              ) : // formatTime(task.working_hours)
+              // a second bethween task.taskprogress[0]?.date and now
+              task.taskprogress.length > 0 ? (
+                formatTime(calculateAccumulatedDifference(task.taskprogress))
               ) : (
-                formatTime(task.working_hours)
+                "0s"
               )}
             </span>
             <TaskActions

@@ -1,4 +1,4 @@
-import type { MenuItem, Progress, Task } from "./types";
+import type { MenuItem, Progress, Task, TaskProgress } from "./types";
 
 export const formatTitleToSlug = (title: string): string => {
   const formattedTitle = title.toLowerCase().replace(/\s+/g, "-");
@@ -31,7 +31,7 @@ export const formatWorkingHours = (seconds: number): string => {
 
 export const formatTime = (seconds: number): string => {
   if (seconds < 60) {
-    return `${seconds}s`;
+    return `${Math.floor(seconds)}s`;
   }
 
   const hours = Math.floor(seconds / 3600);
@@ -43,7 +43,7 @@ export const formatTime = (seconds: number): string => {
     return `${hours}h ${minutes}m`;
   }
 
-  return `${minutes}m`;
+  return `${minutes}m ${Math.floor(remSec)}s`;
 };
 
 export const formatDate = (dateString: string): string => {
@@ -87,8 +87,8 @@ export const createNewTask = (
       step: "TODO",
       working_hours: 0,
       subtasks: [],
-      lastProgress: null,
       order: newOrder,
+      taskprogress: [],
     },
   ];
 };
@@ -123,4 +123,25 @@ export const updateStep = (
 
   // Add the updated task and the new task to the list
   return [...prevTasks.filter((task) => task.id !== taskId), updatedTask];
+};
+
+export const calculateAccumulatedDifference = (
+  taskprogress: TaskProgress[]
+): number => {
+  let accumulatedDifference = 0;
+
+  taskprogress.forEach((progress) => {
+    const { start_date, stop_date } = progress;
+    const startDate = new Date(start_date);
+    const stopDate = new Date(stop_date);
+
+    // if start and stop date are the same, difference is now - start date, otherwise stop date - start date
+    const difference =
+      progress.progress === "IN_PROGRESS"
+        ? Math.abs(Date.now() - startDate.getTime()) / 1000
+        : Math.abs(stopDate.getTime() - startDate.getTime()) / 1000;
+    accumulatedDifference += difference;
+  });
+
+  return accumulatedDifference;
 };
