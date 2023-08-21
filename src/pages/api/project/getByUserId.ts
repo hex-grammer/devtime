@@ -66,6 +66,13 @@ export default async function handler(
         };
       });
 
+      // Sort the projects by lastProgress in descending order (most recent first)
+      projectsWithAccumulatedWorkingHours.sort((a, b) => {
+        const dateA = new Date(a.lastProgress).getTime();
+        const dateB = new Date(b.lastProgress).getTime();
+        return dateB - dateA; // Sort in descending order
+      });
+
       // Return the projects data with accumulated working_hours as the response
       res.status(200).json(projectsWithAccumulatedWorkingHours);
     } catch (error) {
