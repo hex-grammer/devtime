@@ -32,35 +32,11 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (task.step === "IN_PROGRESS") {
-        setTasks((prevTasks) =>
-          prevTasks.map((prevTask) => {
-            if (prevTask.id === task.id) {
-              const newWorkingHours = prevTask.working_hours + 1;
-
-              if (timer % 10 === 0) {
-                taskMutation.updateWorkingHours(
-                  projectId,
-                  task.id,
-                  newWorkingHours
-                );
-              }
-
-              return {
-                ...prevTask,
-                working_hours: newWorkingHours,
-              };
-            }
-            return prevTask;
-          })
-        );
-
-        setTimer((prevTimer) => prevTimer + 1);
-      }
+      task.step === "IN_PROGRESS" && setTimer((prevTimer) => prevTimer + 1);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [task, tasks, setTasks, timer, taskMutation, projectId]);
+  }, [task.step, timer]);
 
   const handleRename = () => {
     setEditing(true);
