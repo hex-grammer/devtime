@@ -1,8 +1,10 @@
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiArrowLeft } from "react-icons/fi";
+import { MdDashboard } from "react-icons/md";
 import useSWR, { mutate } from "swr";
 import KanbanList from "~/components/KanbanList";
 import StatsDetail from "~/components/StatsDetail";
@@ -65,12 +67,13 @@ const KanbanPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col items-center justify-between gap-2 p-4 pb-0 sm:flex-row sm:px-32 sm:pb-4">
         <div className="mb-4 flex justify-start gap-2 sm:m-0">
-          <button
-            className="transform text-3xl font-semibold text-gray-400 transition-all hover:-translate-x-1 hover:text-white"
+          <Link
+            href={"/"}
+            className="transform text-3xl font-semibold text-gray-400 transition-all hover:scale-105 hover:text-gray-100"
             onClick={() => router.back()}
           >
-            <FiArrowLeft />
-          </button>
+            <MdDashboard />
+          </Link>
           <h2 className="flex-1 text-2xl font-bold text-gray-200">
             {editTitle ? (
               <input
