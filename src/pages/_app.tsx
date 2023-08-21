@@ -1,16 +1,19 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { AppProps } from "next/app";
 import { api } from "~/utils/api";
-import { ContextProviders } from "~/context/AppContext";
 import "~/styles/globals.css";
+import { CreateTasksProvider } from "~/context/CreateTaskContext";
+import { GetTasksProvider } from "~/context/GetTaskContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ContextProviders>
-      <ClerkProvider {...pageProps}>
-        <Component {...pageProps} />
-      </ClerkProvider>
-    </ContextProviders>
+    <CreateTasksProvider>
+      <GetTasksProvider>
+        <ClerkProvider {...pageProps}>
+          <Component {...pageProps} />
+        </ClerkProvider>
+      </GetTasksProvider>
+    </CreateTasksProvider>
   );
 }
 
