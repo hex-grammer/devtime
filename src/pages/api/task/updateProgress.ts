@@ -16,29 +16,54 @@ export default async function handler(
     progress: "TODO" | "IN_PROGRESS" | "DONE";
   };
 
-  // get the lowest order number for the task with the given progress
-  const lowestOrderNumber = await prisma.task.findFirst({
-    where: {
-      step: progress,
-    },
-    orderBy: {
-      order: "asc",
-    },
-    select: {
-      order: true,
-    },
-  });
-
   try {
-    const task = await prisma.task.update({
-      where: {
-        id: taskId,
-      },
-      data: {
-        step: progress,
-        order: lowestOrderNumber ? lowestOrderNumber.order - 1 : 0,
-      },
-    });
+    let task;
+
+    if (progress === "IN_PROGRESS") {
+      // Find the lowest order number for tasks with progress "IN_PROGRESS"
+      const lowestOrderNumber = await prisma.task.findFirst({
+        where: {
+          step: "IN_PROGRESS",
+        },
+        orderBy: {
+          order: "asc",
+        },
+        select: {
+          order: true,
+        },
+      });
+
+      // Update the task's progress and order based on the lowest order number
+      task = await prisma.task.update({
+        where: {
+          id: taskId,
+        },
+        data: {
+          step: progress,
+          order: lowestOrderNumber ? lowestOrderNumber.order - 1 : 0,
+        },
+      });
+
+      // Create a new task progress entry
+      await prisma.taskprogress.create({
+        data: {
+          date: new Date(), // Set the date to the current date
+          project_id: task.project_id,
+          task_id: taskId,
+          completed: false, // Set the completed status as needed
+        },
+      });
+    } else {
+      // If progress is not "IN_PROGRESS," simply update the task
+      task = await prisma.task.update({
+        where: {
+          id: taskId,
+        },
+        data: {
+          step: progress,
+        },
+      });
+    }
 
     return res.status(200).json(task);
   } catch (error) {
