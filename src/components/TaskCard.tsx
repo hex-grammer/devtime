@@ -8,7 +8,6 @@ import { LiaEdit } from "react-icons/lia";
 import getMenuItemsByStep, {
   calculateAccumulatedDifference,
   formatTime,
-  formatWorkingHours,
   getOrder,
   updateStep,
 } from "~/utils/utils";
@@ -16,7 +15,6 @@ import { useTaskMutationContext } from "~/context/TaskMutationContext";
 import { NewSubtaskProvider } from "~/context/NewSubtaskContext";
 import { GiSandsOfTime } from "react-icons/gi";
 import { useGetTasksContext } from "~/context/GetTaskContext";
-import { format } from "path";
 
 interface TaskCardProps {
   task: Task;
@@ -29,6 +27,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const taskMutation = useTaskMutationContext();
   const [timer, setTimer] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { tasks, setTasks } = useGetTasksContext();
 
   useEffect(() => {
@@ -164,7 +163,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
               className="w-full cursor-pointer truncate"
               onClick={handleRename}
             >
-              {task.order} | {taskTitle}
+              {taskTitle}
             </div>
           )}
           <div className="flex items-center gap-1">
