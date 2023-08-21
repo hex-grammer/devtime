@@ -93,6 +93,19 @@ export const createNewTask = (
   ];
 };
 
+export const getOrder = (prevTasks: Task[], step: string): number => {
+  const tasksWithSameStep = prevTasks.filter((task) => task.step === step);
+  const smallestOrder =
+    tasksWithSameStep.length === 0
+      ? 0
+      : tasksWithSameStep.reduce(
+          (minOrder, task) => Math.min(minOrder, task.order),
+          Number.MAX_SAFE_INTEGER
+        );
+
+  return smallestOrder - 1;
+};
+
 export const updateStep = (
   prevTasks: Task[],
   taskId: string,

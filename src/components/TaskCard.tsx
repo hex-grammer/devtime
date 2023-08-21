@@ -9,6 +9,7 @@ import getMenuItemsByStep, {
   calculateAccumulatedDifference,
   formatTime,
   formatWorkingHours,
+  getOrder,
   updateStep,
 } from "~/utils/utils";
 import { useTaskMutationContext } from "~/context/TaskMutationContext";
@@ -42,45 +43,56 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
     setEditing(true);
   };
 
-  const handlePlay = () => {
-    setTasks((prevTasks) => updateStep(prevTasks, task.id, "IN_PROGRESS"));
-    taskMutation.updateProgress(projectId, task.id, "IN_PROGRESS");
-  };
+  // const handlePlay = () => {
+  //   setTasks((prevTasks) => {
+  //     const order = getOrder(prevTasks, "IN_PROGRESS");
+  //     taskMutation.updateProgress(projectId, task.id, "IN_PROGRESS", order);
+  //     return updateStep(prevTasks, task.id, "IN_PROGRESS")
+  //   });
+  // };
 
-  const handlePause = () => {
-    setTasks((prevTasks) => updateStep(prevTasks, task.id, "TODO"));
-    taskMutation.updateProgress(projectId, task.id, "TODO");
-  };
+  // const handlePause = () => {
+  //   taskMutation.updateProgress(projectId, task.id, "TODO");
+  //   setTasks((prevTasks) => updateStep(prevTasks, task.id, "TODO"));
+  // };
 
-  const handleFinish = () => {
-    setTasks((prevTasks) => updateStep(prevTasks, task.id, "DONE"));
-    taskMutation.updateProgress(projectId, task.id, "DONE");
+  // const handleFinish = () => {
+  //   taskMutation.updateProgress(projectId, task.id, "DONE");
+  //   setTasks((prevTasks) => updateStep(prevTasks, task.id, "DONE"));
+  // };
+
+  const setStepTo = (step: "TODO" | "IN_PROGRESS" | "DONE") => {
+    setTasks((prevTasks) => {
+      const order = getOrder(prevTasks, step);
+      taskMutation.updateProgress(projectId, task.id, step, order);
+      return updateStep(prevTasks, task.id, step);
+    });
   };
 
   const handleDelete = () => {
+    taskMutation.deleteTask(projectId, task.id);
     setTasks((prevTasks) =>
       prevTasks.filter((prevTask) => prevTask.id !== task.id)
     );
-    taskMutation.deleteTask(projectId, task.id);
   };
 
   const MENU: MenuItem[] = [
     {
       label: "Do It!",
       key: "play",
-      action: handlePlay,
+      action: () => setStepTo("IN_PROGRESS"),
       icon: <LuPlay />,
     },
     {
       label: "Pause",
       key: "pause",
-      action: handlePause,
+      action: () => setStepTo("TODO"),
       icon: <LuPause />,
     },
     {
       label: "Finish",
       key: "finish",
-      action: handleFinish,
+      action: () => setStepTo("DONE"),
       icon: <LuCheckSquare />,
     },
     {
@@ -152,7 +164,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
               className="w-full cursor-pointer truncate"
               onClick={handleRename}
             >
-              {taskTitle}
+              {task.order} | {taskTitle}
             </div>
           )}
           <div className="flex items-center gap-1">

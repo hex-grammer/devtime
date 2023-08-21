@@ -12,7 +12,8 @@ interface TaskMutationContextType {
   updateProgress: (
     projectId: string,
     taskId: string,
-    progress: "TODO" | "IN_PROGRESS" | "DONE"
+    progress: "TODO" | "IN_PROGRESS" | "DONE",
+    order: number
   ) => void;
   deleteTask: (projectId: string, taskId: string) => void;
   updateWorkingHours: (
@@ -76,10 +77,11 @@ export const TaskMutationProvider: React.FC<TaskMutationProviderProps> = ({
   const updateProgress = (
     projectId: string,
     taskId: string,
-    progress: "TODO" | "IN_PROGRESS" | "DONE"
+    progress: "TODO" | "IN_PROGRESS" | "DONE",
+    order: number
   ) => {
     axios
-      .put(`/api/task/updateProgress`, { taskId, progress })
+      .put(`/api/task/updateProgress`, { taskId, progress, order })
       .then(async () => {
         await mutate(`/api/task/get-all?projectId=${projectId}`);
       })

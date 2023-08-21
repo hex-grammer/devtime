@@ -11,28 +11,16 @@ export default async function handler(
     return res.status(405).json({ message: "Method Not Allowed" });
   }
 
-  const { taskId, progress } = req.body as {
+  const { taskId, progress, order } = req.body as {
     taskId: string;
     progress: "TODO" | "IN_PROGRESS" | "DONE";
+    order: number;
   };
 
   try {
     let task;
 
     if (progress === "IN_PROGRESS") {
-      // Find the lowest order number for tasks with progress "IN_PROGRESS"
-      const lowestOrderNumber = await prisma.task.findFirst({
-        where: {
-          step: "IN_PROGRESS",
-        },
-        orderBy: {
-          order: "asc",
-        },
-        select: {
-          order: true,
-        },
-      });
-
       // Update the task's progress and order based on the lowest order number
       task = await prisma.task.update({
         where: {
@@ -40,7 +28,7 @@ export default async function handler(
         },
         data: {
           step: progress,
-          order: lowestOrderNumber ? lowestOrderNumber.order - 1 : 0,
+          order: order,
         },
       });
 
@@ -61,6 +49,7 @@ export default async function handler(
         },
         data: {
           step: progress,
+          order: order,
         },
       });
 
