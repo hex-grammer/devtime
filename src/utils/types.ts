@@ -33,8 +33,8 @@ export interface Subtask {
 
 export interface TaskProgress {
   id: string;
-  start_date: string; // ISO date string
-  stop_date: string; // ISO date string
+  start_date: string | Date; // ISO date string
+  stop_date: string | Date; // ISO date string
   project_id: string;
   task_id: string;
   progress: Progress;

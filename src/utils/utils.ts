@@ -138,15 +138,17 @@ export const updateStep = (
   return [...prevTasks.filter((task) => task.id !== taskId), updatedTask];
 };
 
-export const calculateAccumulatedDifference = (
-  taskprogress: TaskProgress[]
-): number => {
+export const getWorkingHours = (taskprogress: TaskProgress[]): number => {
   let accumulatedDifference = 0;
 
   taskprogress.forEach((progress) => {
     const { start_date, stop_date } = progress;
-    const startDate = new Date(start_date);
-    const stopDate = new Date(stop_date);
+    const startDate: Date = typeof (start_date === "string")
+      ? new Date(start_date)
+      : (start_date as Date);
+    const stopDate: Date = typeof (start_date === "string")
+      ? new Date(stop_date)
+      : (start_date as Date);
 
     // if start and stop date are the same, difference is now - start date, otherwise stop date - start date
     const difference =
@@ -157,4 +159,32 @@ export const calculateAccumulatedDifference = (
   });
 
   return accumulatedDifference;
+};
+
+export const getDaySpent = (taskprogress: TaskProgress[]): number => {
+  const uniqueDates = new Set<string>();
+
+  taskprogress.forEach((progress) => {
+    const { start_date, stop_date } = progress;
+
+    if (start_date && stop_date) {
+      // Check if both dates are defined
+      const startDate: Date =
+        typeof start_date === "string" ? new Date(start_date) : start_date;
+      const stopDate: Date =
+        typeof stop_date === "string" ? new Date(stop_date) : stop_date;
+
+      // Extract the date (day) part as a string
+      const startDay = startDate.toISOString().split("T")[0];
+      const stopDay = stopDate.toISOString().split("T")[0];
+
+      uniqueDates.add(startDay ?? "");
+
+      if (progress.progress !== "IN_PROGRESS" && startDay !== stopDay) {
+        uniqueDates.add(stopDay ?? "");
+      }
+    }
+  });
+
+  return uniqueDates.size;
 };

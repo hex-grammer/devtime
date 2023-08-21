@@ -6,7 +6,7 @@ import { LuCheckSquare, LuPause, LuPlay } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { LiaEdit } from "react-icons/lia";
 import getMenuItemsByStep, {
-  calculateAccumulatedDifference,
+  getWorkingHours,
   formatTime,
   getOrder,
   updateStep,
@@ -175,9 +175,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
                       ?.working_hours ?? 0
                   )} */}
                   {task.taskprogress.length > 0
-                    ? formatTime(
-                        calculateAccumulatedDifference(task.taskprogress)
-                      )
+                    ? formatTime(getWorkingHours(task.taskprogress))
                     : "0s"}
                   <div className="relative">
                     <GiSandsOfTime className="absolute left-0 top-0 animate-ping text-xs text-blue-500 duration-500" />
@@ -187,7 +185,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
               ) : // formatTime(task.working_hours)
               // a second bethween task.taskprogress[0]?.date and now
               task.taskprogress.length > 0 ? (
-                formatTime(calculateAccumulatedDifference(task.taskprogress))
+                formatTime(getWorkingHours(task.taskprogress))
               ) : (
                 "0s"
               )}

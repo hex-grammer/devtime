@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { FiArrowLeft } from "react-icons/fi";
 import { MdDashboard } from "react-icons/md";
 import useSWR, { mutate } from "swr";
 import KanbanList from "~/components/KanbanList";

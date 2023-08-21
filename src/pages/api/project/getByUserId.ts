@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
+import { getDaySpent, getWorkingHours } from "~/utils/utils";
+import { type TaskProgress } from "~/utils/types";
 
 const prisma = new PrismaClient();
 
@@ -43,59 +45,25 @@ export default async function handler(
       const projectsWithAccumulatedWorkingHours = projects.map((project) => {
         const completedTasks = project.tasks.filter(
           (task) => task.step === "DONE"
-        );
-        const totalTasks = project.tasks.length;
+        ).length;
+        const progress = project.tasks.length
+          ? Math.floor((completedTasks / project.tasks.length) * 100)
+          : 0;
 
-        const accumulatedWorkingHours = project.tasks.reduce(
-          (total, task) => total + task.working_hours,
-          0
-        );
-
-        const latestProgress = project.taskprogress[0];
-
-        if (latestProgress) {
-          const millisecondsPerDay = 24 * 60 * 60 * 1000;
-          const startedAt = new Date(project.started_at).getTime();
-          const latestProgressDate = new Date(
-            latestProgress.start_date
-          ).getTime();
-          const daySpent = Math.ceil(
-            (latestProgressDate - startedAt) / millisecondsPerDay
-          );
-
-          const progress = totalTasks
-            ? Math.floor((completedTasks.length / totalTasks) * 100)
-            : 0;
-
-          return {
-            id: project.id,
-            title: project.title,
-            working_hours: accumulatedWorkingHours,
-            started_at: project.started_at,
-            daySpent: daySpent,
-            progress: progress,
-            numberOfTasks: project.tasks.length,
-            lastProgress:
-              latestProgress.progress === "DONE"
-                ? latestProgress.start_date
-                : null,
-          };
-        } else {
-          const progress = totalTasks
-            ? Math.floor((completedTasks.length / totalTasks) * 100)
-            : 0;
-
-          return {
-            id: project.id,
-            title: project.title,
-            working_hours: accumulatedWorkingHours,
-            started_at: project.started_at,
-            daySpent: 0,
-            progress: progress,
-            numberOfTasks: project.tasks.length,
-            lastProgress: null,
-          };
-        }
+        return {
+          id: project.id,
+          title: project.title,
+          working_hours: getWorkingHours(
+            project.taskprogress as TaskProgress[]
+          ),
+          started_at: project.started_at.toISOString(),
+          daySpent: getDaySpent(project.taskprogress as TaskProgress[]),
+          progress: progress,
+          numberOfTasks: project.tasks.length,
+          lastProgress:
+            project.taskprogress[0]?.start_date?.toISOString() ??
+            project.started_at.toISOString(),
+        };
       });
 
       // Return the projects data with accumulated working_hours as the response
