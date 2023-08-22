@@ -4,11 +4,17 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import { CreateTasksProvider } from "~/context/CreateTaskContext";
 import { GetTasksProvider } from "~/context/GetTaskContext";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <CreateTasksProvider>
       <GetTasksProvider>
+        <Head>
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="apple-touch-icon" href="/icon.png"></link>
+          <meta name="theme-color" content="#fff" />
+        </Head>
         <ClerkProvider {...pageProps}>
           <Component {...pageProps} />
         </ClerkProvider>

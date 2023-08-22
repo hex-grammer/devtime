@@ -71,7 +71,7 @@ const KanbanPage: React.FC = () => {
     <>
       <NextSeo
         title={`${isInProgress ? "[ ▶ ] " : ""}${
-          projectData ? projectData?.title : "Devtime"
+          projectData ? projectData?.title : "DevTime"
         }`}
         openGraph={{
           type: "website",
