@@ -11,6 +11,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { Modal } from "antd";
+import { NextSeo } from "next-seo";
 
 const { confirm } = Modal;
 
@@ -88,38 +89,57 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-800">
-      {/* Header Section */}
-      <div className="flex items-center justify-between px-4 py-4 sm:px-32">
-        <h1 className="text-3xl font-bold text-gray-200">DevTime</h1>
-        <div className="flex items-center gap-2">
-          {user ? (
-            <div className="text-lg font-semibold text-gray-300">
-              {user.fullName}
-            </div>
-          ) : (
-            // div skeleton with animate-pulse
-            <div className="h-8 w-32 animate-pulse rounded-md bg-gray-700" />
-          )}
-          <UserButton afterSignOutUrl="/" />
+    <>
+      <NextSeo
+        title="DevTime"
+        openGraph={{
+          type: "website",
+          url: "https://devtime.rizaltsx.com",
+          title: "DevTime | Project Management Tool",
+          description: "A useful tool for managing your projects and tasks.",
+          images: [
+            {
+              url: "https://devtime.rizaltsx.com/img/og-image.png",
+              width: 800,
+              height: 600,
+              alt: "DevTime Image",
+            },
+          ],
+        }}
+      />
+
+      <main className="min-h-screen bg-gray-800">
+        {/* Header Section */}
+        <div className="flex items-center justify-between px-4 py-4 sm:px-32">
+          <h1 className="text-3xl font-bold text-gray-200">DevTime</h1>
+          <div className="flex items-center gap-2">
+            {user ? (
+              <div className="text-lg font-semibold text-gray-300">
+                {user.fullName}
+              </div>
+            ) : (
+              // div skeleton with animate-pulse
+              <div className="h-8 w-32 animate-pulse rounded-md bg-gray-700" />
+            )}
+            <UserButton afterSignOutUrl="/" />
+          </div>
         </div>
-      </div>
 
-      {/* Actions Section */}
-      <div className="flex items-center justify-between gap-4 px-4 py-2 sm:px-32">
-        <Search />
-        <button
-          className="flex items-center gap-1 rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-          onClick={() => setOpenModal(true)}
-        >
-          <AiOutlinePlus className="text-xl font-bold" /> New Task
-        </button>
-      </div>
+        {/* Actions Section */}
+        <div className="flex items-center justify-between gap-4 px-4 py-2 sm:px-32">
+          <Search />
+          <button
+            className="flex items-center gap-1 rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            onClick={() => setOpenModal(true)}
+          >
+            <AiOutlinePlus className="text-xl font-bold" /> New Task
+          </button>
+        </div>
 
-      {/* Project Card List Section */}
-      <div className="grid gap-4 px-4 py-4 sm:grid-cols-3 sm:px-32 md:grid-cols-4">
-        {projects ? (
-          projects.map((project, index) => (
+        {/* Project Card List Section */}
+        <div className="grid gap-4 px-4 py-4 sm:grid-cols-3 sm:px-32 md:grid-cols-4">
+          {projects ? (
+            projects.map((project, index) => (
               <div key={index} className="group relative">
                 <ProjectCard project={project} />
                 <button
@@ -129,21 +149,22 @@ export default function Home() {
                   <RiDeleteBin6Line className="text-xs text-white" />
                 </button>
               </div>
-          ))
-        ) : (
-          <ProjectSkeleton number={4} />
-        )}
-      </div>
+            ))
+          ) : (
+            <ProjectSkeleton number={4} />
+          )}
+        </div>
 
-      {/* Create Project Modal */}
-      <CreateProjectModal
-        open={openModal}
-        onCreate={() => void handleCreateProject()}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-        projectName={newProjectName}
-        onProjectNameChange={setNewProjectName}
-      />
-    </main>
+        {/* Create Project Modal */}
+        <CreateProjectModal
+          open={openModal}
+          onCreate={() => void handleCreateProject()}
+          confirmLoading={confirmLoading}
+          onCancel={handleCancel}
+          projectName={newProjectName}
+          onProjectNameChange={setNewProjectName}
+        />
+      </main>
+    </>
   );
 }
