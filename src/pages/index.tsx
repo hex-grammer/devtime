@@ -62,8 +62,9 @@ export default function Home() {
   const handleDelete = async (projectId: string) => {
     console.log("Clicked delete button");
     try {
-      // Make an axios POST request to the API endpoint
-      await axios.delete(`/api/project/delete?id=${projectId}`);
+      // Make an axios DELETE request to the API endpoint and return the promise
+      const deletePromise = axios.delete(`/api/project/delete?id=${projectId}`);
+      await deletePromise; // Wait for the DELETE request to complete
       await mutate(`/api/project/getByUserId?userId=${user?.id ?? ""}`);
     } catch (error) {
       console.error(error);
@@ -71,21 +72,29 @@ export default function Home() {
     }
   };
 
-  const showDeleteConfirm = (title: string, projectId: string) => {
-    confirm({
-      title: "Delete project",
-      icon: <ExclamationCircleFilled />,
-      content: `Are you sure delete '${title}'?`,
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
-      onOk() {
-        void handleDelete(projectId);
-      },
-      onCancel() {
-        console.log("Cancel");
-      },
-    });
+  const showDeleteConfirm = async (title: string, projectId: string) => {
+    try {
+      await new Promise<void>((resolve) => {
+        confirm({
+          title: "Delete project",
+          icon: <ExclamationCircleFilled />,
+          content: `Are you sure delete '${title}'?`,
+          okText: "Yes",
+          okType: "danger",
+          cancelText: "No",
+          async onOk() {
+            await handleDelete(projectId); // Wait for handleDelete to finish
+            resolve(); // Resolve the promise to close the dialog
+          },
+          onCancel() {
+            console.log("Cancel");
+            resolve(); // Resolve the promise to close the dialog
+          },
+        });
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -144,7 +153,9 @@ export default function Home() {
                 <ProjectCard project={project} />
                 <button
                   className="absolute right-5 top-5 hidden scale-0 rounded-full bg-red-500 p-1.5 transition-all duration-75 hover:bg-red-600 group-hover:block group-hover:scale-125"
-                  onClick={() => showDeleteConfirm(project.title, project.id)}
+                  onClick={() =>
+                    void showDeleteConfirm(project.title, project.id)
+                  }
                 >
                   <RiDeleteBin6Line className="text-xs text-white" />
                 </button>
