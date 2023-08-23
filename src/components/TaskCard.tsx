@@ -127,7 +127,15 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
           task.subtasks.length > 0 ? "py-2" : "py-1"
         }`}
       >
-        <div className="group flex items-end justify-between font-semibold">
+        <div
+          className={`group flex items-end justify-between font-semibold ${
+            taskTitle.length > 28
+              ? taskTitle.length > 40
+                ? "flex-col"
+                : "sm:flex-col"
+              : ""
+          }`}
+        >
           {editing ? (
             <input
               type="text"
@@ -136,15 +144,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
               onBlur={handleSave}
               placeholder="Task title..."
               onKeyDown={(event) => event.key === "Enter" && handleSave()}
-              className="m-0 truncate border-b bg-gray-700 text-left text-gray-200 outline-none"
+              className="m-0 w-full truncate border-b bg-gray-700 text-left text-gray-200 outline-none"
               ref={inputRef}
               autoFocus
             />
           ) : (
-            <div
-              className="w-full cursor-pointer truncate"
-              onClick={handleRename}
-            >
+            <div className="w-full cursor-pointer" onClick={handleRename}>
               {taskTitle}
             </div>
           )}
@@ -152,10 +157,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
             <span className="whitespace-nowrap font-normal text-gray-400">
               {task.step === "IN_PROGRESS" ? (
                 <div className="flex items-center gap-1">
-                  {/* {formatWorkingHours(
-                    tasks.find((thisTask) => thisTask.id === task.id)
-                      ?.working_hours ?? 0
-                  )} */}
                   {task.taskprogress.length > 0
                     ? formatTime(getWorkingHours(task.taskprogress))
                     : "0s"}
@@ -164,9 +165,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
                     <GiSandsOfTime className="text-xs text-blue-500" />
                   </div>
                 </div>
-              ) : // formatTime(task.working_hours)
-              // a second bethween task.taskprogress[0]?.date and now
-              task.taskprogress.length > 0 ? (
+              ) : task.taskprogress.length > 0 ? (
                 formatTime(getWorkingHours(task.taskprogress))
               ) : (
                 "0s"

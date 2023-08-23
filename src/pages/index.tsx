@@ -132,7 +132,7 @@ export default function Home() {
             className="flex items-center gap-1 rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
             onClick={() => setOpenModal(true)}
           >
-            <AiOutlinePlus className="text-xl font-bold" /> New Task
+            <AiOutlinePlus className="text-xl font-bold" /> New Project
           </button>
         </div>
 
