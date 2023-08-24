@@ -40,3 +40,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Ignore Service Worker (SW) and workbook files in the public folder
+/public/sw.*
+/public/workbox.*

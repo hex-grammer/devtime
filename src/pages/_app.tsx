@@ -5,6 +5,7 @@ import "~/styles/globals.css";
 import { CreateTasksProvider } from "~/context/CreateTaskContext";
 import { GetTasksProvider } from "~/context/GetTaskContext";
 import Head from "next/head";
+import "react-perfect-scrollbar/dist/css/styles.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

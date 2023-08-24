@@ -12,6 +12,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { Modal } from "antd";
 import { NextSeo } from "next-seo";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 const { confirm } = Modal;
 
@@ -117,64 +118,70 @@ export default function Home() {
         }}
       />
 
-      <main className="min-h-screen bg-gray-800">
-        {/* Header Section */}
-        <div className="flex items-center justify-between px-4 py-4 sm:px-32">
-          <h1 className="text-3xl font-bold text-gray-200">DevTime</h1>
-          <div className="flex items-center gap-2">
-            {user ? (
-              <div className="text-lg font-semibold text-gray-300">
-                {user.fullName}
-              </div>
-            ) : (
-              // div skeleton with animate-pulse
-              <div className="h-8 w-32 animate-pulse rounded-md bg-gray-700" />
-            )}
-            <UserButton afterSignOutUrl="/" />
+      {/* Create Project Modal */}
+      <CreateProjectModal
+        open={openModal}
+        onCreate={() => void handleCreateProject()}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        projectName={newProjectName}
+        onProjectNameChange={setNewProjectName}
+      />
+
+      <main className="flex h-screen flex-col gap-1 overflow-hidden bg-gray-800 sm:px-32">
+        <div className="">
+          {/* Header Section */}
+          <div className="flex items-center justify-between px-4 py-4 sm:px-0">
+            <h1 className="text-3xl font-bold text-gray-200">DevTime</h1>
+            <div className="flex items-center gap-2">
+              {user ? (
+                <div className="text-lg font-semibold text-gray-300">
+                  {user.fullName}
+                </div>
+              ) : (
+                // div skeleton with animate-pulse
+                <div className="h-8 w-32 animate-pulse rounded-md bg-gray-700" />
+              )}
+              <UserButton afterSignOutUrl="/" />
+            </div>
+          </div>
+
+          {/* Actions Section */}
+          <div className="flex items-center justify-between gap-4 px-4 py-2 sm:px-0">
+            <Search />
+            <button
+              className="flex items-center gap-1 rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+              onClick={() => setOpenModal(true)}
+            >
+              <AiOutlinePlus className="text-xl font-bold" /> New Project
+            </button>
           </div>
         </div>
 
-        {/* Actions Section */}
-        <div className="flex items-center justify-between gap-4 px-4 py-2 sm:px-32">
-          <Search />
-          <button
-            className="flex items-center gap-1 rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-            onClick={() => setOpenModal(true)}
-          >
-            <AiOutlinePlus className="text-xl font-bold" /> New Project
-          </button>
-        </div>
-
         {/* Project Card List Section */}
-        <div className="grid gap-4 px-4 py-4 sm:grid-cols-3 sm:px-32 md:grid-cols-4">
-          {projects ? (
-            projects.map((project, index) => (
-              <div key={index} className="group relative">
-                <ProjectCard project={project} />
-                <button
-                  className="absolute right-5 top-5 hidden scale-0 rounded-full bg-red-500 p-1.5 transition-all duration-75 hover:bg-red-600 group-hover:block group-hover:scale-125"
-                  onClick={() =>
-                    void showDeleteConfirm(project.title, project.id)
-                  }
-                >
-                  <RiDeleteBin6Line className="text-xs text-white" />
-                </button>
-              </div>
-            ))
-          ) : (
-            <ProjectSkeleton number={4} />
-          )}
+        <div className="flex-1 overflow-auto">
+          <PerfectScrollbar>
+            <div className="grid w-full gap-4 px-4 pb-4 sm:grid-cols-3 sm:px-0 md:grid-cols-4">
+              {projects ? (
+                projects.map((project, index) => (
+                  <div key={index} className="group relative">
+                    <ProjectCard project={project} />
+                    <button
+                      className="absolute right-5 top-5 hidden scale-0 rounded-full bg-red-500 p-1.5 transition-all duration-75 hover:bg-red-600 group-hover:block group-hover:scale-125"
+                      onClick={() =>
+                        void showDeleteConfirm(project.title, project.id)
+                      }
+                    >
+                      <RiDeleteBin6Line className="text-xs text-white" />
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <ProjectSkeleton number={4} />
+              )}
+            </div>
+          </PerfectScrollbar>
         </div>
-
-        {/* Create Project Modal */}
-        <CreateProjectModal
-          open={openModal}
-          onCreate={() => void handleCreateProject()}
-          confirmLoading={confirmLoading}
-          onCancel={handleCancel}
-          projectName={newProjectName}
-          onProjectNameChange={setNewProjectName}
-        />
       </main>
     </>
   );

@@ -11,6 +11,7 @@ import { useCreateTasksContext } from "~/context/CreateTaskContext";
 import { TaskMutationProvider } from "~/context/TaskMutationContext";
 import type { Project } from "~/utils/types";
 import { NextSeo } from "next-seo";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 const fetcher = async (url: string) => {
   const response = await axios.get(url);
@@ -89,10 +90,10 @@ const KanbanPage: React.FC = () => {
           ],
         }}
       />
-      <main className="min-h-screen bg-gray-800">
+      <main className="bg-gray-800 sm:h-screen sm:overflow-hidden sm:px-32">
         {/* Header */}
-        <div className="flex flex-col items-center justify-between gap-2 p-4 pb-0 sm:flex-row sm:px-32 sm:pb-4">
-          <div className="mb-4 flex justify-start gap-2 sm:m-0">
+        <div className="flex h-[16vh] flex-col justify-between p-4 pb-0 sm:h-[10vh] sm:flex-row sm:items-center sm:pb-4">
+          <div className="flex justify-start gap-2 sm:m-0">
             <Link
               href={"/"}
               className="transform text-3xl font-semibold text-gray-400 transition-all hover:scale-105 hover:text-gray-100"
@@ -133,7 +134,7 @@ const KanbanPage: React.FC = () => {
 
         {/* Kanban */}
         <TaskMutationProvider>
-          <div className="grid gap-4 px-4 py-4 sm:grid-cols-4 sm:px-32">
+          <div className="grid gap-4 px-4 py-4 sm:grid-cols-4">
             <KanbanList
               projectId={project_id}
               initialTasks={projectData?.tasks ?? []}
