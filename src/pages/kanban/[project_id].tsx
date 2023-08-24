@@ -5,13 +5,15 @@ import { useState, useEffect } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { MdDashboard } from "react-icons/md";
 import useSWR, { mutate } from "swr";
-import KanbanList from "~/components/KanbanList";
 import StatsDetail from "~/components/StatsDetail";
 import { useCreateTasksContext } from "~/context/CreateTaskContext";
 import { TaskMutationProvider } from "~/context/TaskMutationContext";
 import type { Project } from "~/utils/types";
 import { NextSeo } from "next-seo";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import { useMediaQuery } from "react-responsive";
+import KanbanSection from "~/components/KanbanSection";
+import { Tabs } from "antd";
+import React from "react";
 
 const fetcher = async (url: string) => {
   const response = await axios.get(url);
@@ -22,8 +24,10 @@ const KanbanPage: React.FC = () => {
   const router = useRouter();
   const { project_id } = router.query as { project_id: string };
   const { setIsTaskLoading, setIsCreateNewTask } = useCreateTasksContext();
+  const [domLoaded, setDomLoaded] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
   const [newProjectTitle, setNewProjectTitle] = useState("");
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const { data: projectData } = useSWR<Project>(
     `/api/task/get-all?projectId=${project_id}`,
     fetcher
@@ -42,6 +46,7 @@ const KanbanPage: React.FC = () => {
 
   useEffect(() => {
     projectData && setNewProjectTitle(projectData.title);
+    setDomLoaded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -68,6 +73,64 @@ const KanbanPage: React.FC = () => {
     setIsTaskLoading(false);
   }
 
+  const todoTasks = projectData?.tasks?.filter((task) => task.step === "TODO");
+  const inProgressTasks = projectData?.tasks?.filter(
+    (task) => task.step === "IN_PROGRESS"
+  );
+  const doneTasks = projectData?.tasks?.filter((task) => task.step === "DONE");
+
+  const Label = ({ title }: { title: string }) => (
+    <span className="font-semibold text-gray-300">{title}</span>
+  );
+
+  const tabsContent = [
+    {
+      label: <Label title="TO DO" />,
+      key: "1",
+      children: (
+        <KanbanSection
+          projectId={project_id}
+          title="TO DO"
+          tasks={todoTasks ?? []}
+        />
+      ),
+    },
+    {
+      label: <Label title="IN PROGRESS" />,
+      key: "2",
+      children: (
+        <KanbanSection
+          projectId={project_id}
+          title="IN PROGRESS"
+          tasks={inProgressTasks ?? []}
+        />
+      ),
+    },
+    {
+      label: <Label title="DONE" />,
+      key: "3",
+      children: (
+        <KanbanSection
+          projectId={project_id}
+          title="DONE"
+          tasks={doneTasks ?? []}
+        />
+      ),
+    },
+    {
+      label: <Label title="STATS" />,
+      key: "4",
+      children: (
+        <div>
+          {!isTabletOrMobile && (
+            <h3 className="mb-2 text-xl font-bold text-gray-200">STATS</h3>
+          )}
+          <StatsDetail projectData={projectData} />
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
       <NextSeo
@@ -90,7 +153,7 @@ const KanbanPage: React.FC = () => {
           ],
         }}
       />
-      <main className="bg-gray-800 sm:h-screen sm:overflow-hidden sm:px-32">
+      <main className="h-screen overflow-hidden bg-gray-800 sm:px-32">
         {/* Header */}
         <div className="flex h-[16vh] flex-col justify-between p-4 pb-0 sm:h-[10vh] sm:flex-row sm:items-center sm:pb-4">
           <div className="flex justify-start gap-2 sm:m-0">
@@ -135,16 +198,17 @@ const KanbanPage: React.FC = () => {
         {/* Kanban */}
         <TaskMutationProvider>
           <div className="grid gap-4 px-4 py-4 sm:grid-cols-4">
-            <KanbanList
-              projectId={project_id}
-              initialTasks={projectData?.tasks ?? []}
-            />
-
-            {/* STATS */}
-            <div>
-              <h3 className="mb-2 text-xl font-bold text-gray-200">STATS</h3>
-              <StatsDetail projectData={projectData} />
-            </div>
+            {isTabletOrMobile && domLoaded ? (
+              <Tabs defaultActiveKey="1" centered items={tabsContent} />
+            ) : (
+              <>
+                {tabsContent.map((tabContent, index) => (
+                  <React.Fragment key={index}>
+                    {tabContent.children}
+                  </React.Fragment>
+                ))}
+              </>
+            )}
           </div>
         </TaskMutationProvider>
       </main>

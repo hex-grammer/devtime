@@ -31,6 +31,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
     "react-perfect-scrollbar": "^1.5.8",
+    "react-responsive": "^9.0.2",
     "superjson": "1.12.2",
     "swr": "^2.2.0",
     "use-context-menu": "^0.4.12",
