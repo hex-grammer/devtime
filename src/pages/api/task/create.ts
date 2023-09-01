@@ -44,6 +44,7 @@ export default async function handler(
             ? (lastOrder?.order ?? 0) - 1
             : (lastOrder?.order ?? 0) + 1,
       },
+      include: { subtasks: true, taskprogress: true },
     });
 
     return res.status(201).json(newTask);
