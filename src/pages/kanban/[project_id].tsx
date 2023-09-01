@@ -8,12 +8,13 @@ import useSWR, { mutate } from "swr";
 import StatsDetail from "~/components/StatsDetail";
 import { useCreateTasksContext } from "~/context/CreateTaskContext";
 import { TaskMutationProvider } from "~/context/TaskMutationContext";
-import type { Project } from "~/utils/types";
+import type { Project, Task } from "~/utils/types";
 import { NextSeo } from "next-seo";
 import { useMediaQuery } from "react-responsive";
 import KanbanSection from "~/components/KanbanSection";
 import { Tabs } from "antd";
 import React from "react";
+import { useGetTasksContext } from "~/context/GetTaskContext";
 
 const fetcher = async (url: string) => {
   const response = await axios.get(url);
@@ -27,25 +28,32 @@ const KanbanPage: React.FC = () => {
   const [domLoaded, setDomLoaded] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
   const [newProjectTitle, setNewProjectTitle] = useState("");
+  const { tasks, setTasks } = useGetTasksContext();
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
-  const { data: projectData } = useSWR<Project>(
+  const [todoTasks, setTodoTasks] = useState<Task[]>([]);
+  const [inProgressTasks, setInProgressTasks] = useState<Task[]>([]);
+  const [doneTasks, setDoneTasks] = useState<Task[]>([]);
+  const { data: dbProjectData } = useSWR<Project>(
     `/api/task/get-all?projectId=${project_id}`,
     fetcher
   );
 
   // is project data in progress
-  const isInProgress = projectData?.tasks?.some(
+  const isInProgress = dbProjectData?.tasks?.some(
     (task) => task.step === "IN_PROGRESS"
   );
 
-  if (!projectData) {
+  if (!dbProjectData) {
     setIsTaskLoading(true);
   } else {
     setIsTaskLoading(false);
+    tasks.length === 0 && setTasks(dbProjectData?.tasks ?? []);
+    // localStorage.setItem("tasks", JSON.stringify(projectData?.tasks ?? []));
   }
 
   useEffect(() => {
-    projectData && setNewProjectTitle(projectData.title);
+    dbProjectData && setNewProjectTitle(dbProjectData.title);
+    setTasks(dbProjectData?.tasks ?? []);
     setDomLoaded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -58,7 +66,7 @@ const KanbanPage: React.FC = () => {
 
     // create a new task
     await axios.post("/api/project/update-title", {
-      projectId: projectData?.id,
+      projectId: dbProjectData?.id,
       newTitle: newProjectTitle,
     });
 
@@ -67,17 +75,12 @@ const KanbanPage: React.FC = () => {
     setEditTitle(false);
   };
 
-  if (!projectData) {
-    setIsTaskLoading(true);
-  } else {
-    setIsTaskLoading(false);
-  }
-
-  const todoTasks = projectData?.tasks?.filter((task) => task.step === "TODO");
-  const inProgressTasks = projectData?.tasks?.filter(
-    (task) => task.step === "IN_PROGRESS"
-  );
-  const doneTasks = projectData?.tasks?.filter((task) => task.step === "DONE");
+  useEffect(() => {
+    setTodoTasks(tasks.filter((task) => task.step === "TODO"));
+    setInProgressTasks(tasks.filter((task) => task.step === "IN_PROGRESS"));
+    setDoneTasks(tasks.filter((task) => task.step === "DONE"));
+    console.log("tasks", tasks);
+  }, [tasks]);
 
   const Label = ({ title }: { title: string }) => (
     <span className="font-semibold text-gray-300">{title}</span>
@@ -125,7 +128,7 @@ const KanbanPage: React.FC = () => {
           {!isTabletOrMobile && (
             <h3 className="mb-2 text-xl font-bold text-gray-200">STATS</h3>
           )}
-          <StatsDetail projectData={projectData} />
+          <StatsDetail projectData={dbProjectData} />
         </div>
       ),
     },
@@ -135,12 +138,12 @@ const KanbanPage: React.FC = () => {
     <>
       <NextSeo
         title={`${isInProgress ? "[ ▶ ] " : ""}${
-          projectData ? projectData?.title : "DevTime"
+          dbProjectData ? dbProjectData?.title : "DevTime"
         }`}
         openGraph={{
           type: "website",
           url: `https://devtime.rizaltsx.com/kanban/${project_id}`,
-          title: `Devtime | ${projectData?.title}`,
+          title: `Devtime | ${dbProjectData?.title}`,
           description:
             "I use Devtime to manage my projects and tasks. Check it out!",
           images: [
@@ -182,7 +185,7 @@ const KanbanPage: React.FC = () => {
                   className="w-full cursor-pointer truncate"
                   onClick={() => setEditTitle(true)}
                 >
-                  {projectData?.title}
+                  {dbProjectData?.title}
                 </div>
               )}
             </h2>
@@ -202,11 +205,12 @@ const KanbanPage: React.FC = () => {
               <Tabs defaultActiveKey="1" centered items={tabsContent} />
             ) : (
               <>
-                {tabsContent.map((tabContent, index) => (
-                  <React.Fragment key={index}>
-                    {tabContent.children}
-                  </React.Fragment>
-                ))}
+                {domLoaded &&
+                  tabsContent.map((tabContent, index) => (
+                    <React.Fragment key={index}>
+                      {tabContent.children}
+                    </React.Fragment>
+                  ))}
               </>
             )}
           </div>

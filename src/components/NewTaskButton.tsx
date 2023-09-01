@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useTaskMutationContext } from "~/context/TaskMutationContext";
 import { useGetTasksContext } from "~/context/GetTaskContext";
 import { useCreateTasksContext } from "~/context/CreateTaskContext";
-import { createNewTask } from "~/utils/utils";
+import { createNewTask } from "~/utils/createNewTask";
 
 interface NewTaskButtonProps {
   isActive?: boolean;
@@ -22,13 +22,11 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
   const { setTasks } = useGetTasksContext();
   const taskMutation = useTaskMutationContext();
 
-  const handleButtonClick = () => {
-    if (!editing) {
-      setEditing(true);
-    }
-  };
-
   const handleSave = () => {
+    setTaskTitle("");
+    setEditing(false);
+    setIsCreateNewTask(false);
+
     // return if task title is empty
     if (!taskTitle) {
       setIsCreateNewTask(false);
@@ -36,12 +34,12 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
     }
 
     // create a new task
-    setTasks((prevTasks) => createNewTask(prevTasks, taskTitle, order));
+    setTasks((prevTasks) => {
+      // const newTask = createNewTask(prevTasks, taskTitle, order);
+      // console.log(newTask);
+      return createNewTask(prevTasks, taskTitle, order);
+    });
     taskMutation.createNewTask(projectId, taskTitle, order);
-
-    setTaskTitle("");
-    setEditing(false);
-    setIsCreateNewTask(false);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +65,7 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
         />
       ) : (
         <button
-          onClick={handleButtonClick}
+          onClick={() => setEditing((e) => !e)}
           className="flex w-full cursor-pointer items-center gap-1 rounded-md p-2 py-1 text-left text-gray-400 hover:bg-gray-600"
         >
           <AiOutlinePlus className="text-xl font-bold" /> New Task
