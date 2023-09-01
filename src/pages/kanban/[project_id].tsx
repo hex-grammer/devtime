@@ -53,7 +53,7 @@ const KanbanPage: React.FC = () => {
 
   useEffect(() => {
     dbProjectData && setNewProjectTitle(dbProjectData.title);
-    setTasks(dbProjectData?.tasks ?? []);
+    // setTasks(dbProjectData?.tasks ?? []);
     setDomLoaded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
