@@ -42,38 +42,38 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
     setEditing(true);
   };
 
-  const setStepTo = (step: "TODO" | "IN_PROGRESS" | "DONE") => {
+  const setStepTo = async (step: "TODO" | "IN_PROGRESS" | "DONE") => {
+    const order = getOrder(tasks, step);
     setTasks((prevTasks) => {
-      const order = getOrder(prevTasks, step);
-      taskMutation.updateProgress(projectId, task.id, step, order);
       return updateStep(prevTasks, task.id, step);
     });
+    await taskMutation.updateProgress(projectId, task.id, step, order);
   };
 
-  const handleDelete = () => {
-    taskMutation.deleteTask(projectId, task.id);
+  const handleDelete = async () => {
     setTasks((prevTasks) =>
       prevTasks.filter((prevTask) => prevTask.id !== task.id)
     );
+    await taskMutation.deleteTask(projectId, task.id);
   };
 
   const MENU: MenuItem[] = [
     {
       label: "Do It!",
       key: "play",
-      action: () => setStepTo("IN_PROGRESS"),
+      action: () => void setStepTo("IN_PROGRESS"),
       icon: <LuPlay />,
     },
     {
       label: "Pause",
       key: "pause",
-      action: () => setStepTo("TODO"),
+      action: () => void setStepTo("TODO"),
       icon: <LuPause />,
     },
     {
       label: "Finish",
       key: "finish",
-      action: () => setStepTo("DONE"),
+      action: () => void setStepTo("DONE"),
       icon: <LuCheckSquare />,
     },
     {
@@ -92,22 +92,19 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
       label: "Delete",
       key: "delete",
       danger: true,
-      action: handleDelete,
+      action: () => void handleDelete(),
       icon: <RiDeleteBin6Line />,
     },
   ];
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // return if task title is empty
     if (!taskTitle) {
       return setEditing(false);
     }
 
-    // create a new task
-    taskMutation.updateTitle(projectId, task.id, taskTitle);
-
-    // setTaskTitle("");
     setEditing(false);
+    await taskMutation.updateTitle(projectId, task.id, taskTitle);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,9 +138,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
               type="text"
               value={taskTitle}
               onChange={handleChange}
-              onBlur={handleSave}
+              onBlur={() => void handleSave}
               placeholder="Task title..."
-              onKeyDown={(event) => event.key === "Enter" && handleSave()}
+              onKeyDown={(event) => event.key === "Enter" && void handleSave()}
               className="m-0 w-full truncate border-b bg-gray-700 text-left text-gray-200 outline-none"
               ref={inputRef}
               autoFocus

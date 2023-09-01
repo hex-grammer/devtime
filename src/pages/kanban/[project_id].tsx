@@ -79,6 +79,7 @@ const KanbanPage: React.FC = () => {
     setTodoTasks(tasks.filter((task) => task.step === "TODO"));
     setInProgressTasks(tasks.filter((task) => task.step === "IN_PROGRESS"));
     setDoneTasks(tasks.filter((task) => task.step === "DONE"));
+    console.log("tasks", tasks);
   }, [tasks]);
 
   const Label = ({ title }: { title: string }) => (

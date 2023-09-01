@@ -22,7 +22,7 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
   const { setTasks } = useGetTasksContext();
   const taskMutation = useTaskMutationContext();
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setTaskTitle("");
     setEditing(false);
     setIsCreateNewTask(false);
@@ -34,12 +34,8 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
     }
 
     // create a new task
-    setTasks((prevTasks) => {
-      // const newTask = createNewTask(prevTasks, taskTitle, order);
-      // console.log(newTask);
-      return createNewTask(prevTasks, taskTitle, order);
-    });
-    taskMutation.createNewTask(projectId, taskTitle, order);
+    setTasks((prevTasks) => createNewTask(prevTasks, taskTitle, order));
+    await taskMutation.createNewTask(projectId, taskTitle, order);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
