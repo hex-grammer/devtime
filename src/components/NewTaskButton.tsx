@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useTaskMutationContext } from "~/context/TaskMutationContext";
 import { useGetTasksContext } from "~/context/GetTaskContext";
 import { useCreateTasksContext } from "~/context/CreateTaskContext";
-import { createNewTask } from "~/utils/createNewTask";
+import { addNewTask } from "~/utils/addNewTask";
+import { produce } from "immer";
 
 interface NewTaskButtonProps {
   isActive?: boolean;
@@ -22,7 +23,12 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
   const { setTasks } = useGetTasksContext();
   const taskMutation = useTaskMutationContext();
 
-  const handleSave = async () => {
+  const handleSave = async (
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.FocusEvent<HTMLInputElement, Element>
+  ) => {
+    e.preventDefault();
     setTaskTitle("");
     setEditing(false);
     setIsCreateNewTask(false);
@@ -34,7 +40,11 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
     }
 
     // create a new task
-    setTasks((prevTasks) => createNewTask(prevTasks, taskTitle, order));
+    setTasks(
+      produce((draft) => {
+        draft.push(addNewTask(draft, taskTitle, order));
+      })
+    );
     await taskMutation.createNewTask(projectId, taskTitle, order);
   };
 
@@ -49,11 +59,11 @@ const NewTaskButton: React.FC<NewTaskButtonProps> = ({
           type="text"
           value={taskTitle}
           onChange={handleChange}
-          onBlur={() => void handleSave()}
+          onBlur={(e) => void handleSave(e)}
           placeholder="Task title..."
           onKeyDown={(event) => {
             if (event.key === "Enter") {
-              void handleSave();
+              void handleSave(event);
             }
           }}
           className="w-full cursor-text rounded-md border border-blue-600 bg-gray-700 p-2 py-1 text-left text-gray-200 outline-none"

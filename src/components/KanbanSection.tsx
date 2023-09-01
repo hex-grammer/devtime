@@ -38,7 +38,7 @@ const KanbanSection: React.FC<KanbanSectionProps> = ({
           {title === "TO DO" && isCreateNewTask && (
             <NewTaskButton isActive projectId={projectId} order="first" />
           )}
-          {tasks
+          {[...tasks]
             .slice() // Create a shallow copy of the array to avoid mutating the original
             .sort((a, b) => a.order - b.order) // Sort tasks by order in ascending order
             .map((task) => (

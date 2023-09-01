@@ -38,14 +38,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
     return () => clearInterval(interval);
   }, [task.step, timer]);
 
-  const handleRename = () => {
-    setEditing(true);
-  };
-
   const setStepTo = async (step: "TODO" | "IN_PROGRESS" | "DONE") => {
     const order = getOrder(tasks, step);
     setTasks((prevTasks) => {
-      return updateStep(prevTasks, task.id, step);
+      return updateStep(prevTasks, task.id, step).slice(0);
     });
     await taskMutation.updateProgress(projectId, task.id, step, order);
   };
@@ -79,7 +75,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
     {
       label: "Rename",
       key: "rename",
-      action: handleRename,
+      action: () => setEditing(true),
       icon: <LiaEdit />,
     },
     // {
@@ -98,12 +94,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
   ];
 
   const handleSave = async () => {
-    // return if task title is empty
-    if (!taskTitle) {
-      return setEditing(false);
-    }
-
     setEditing(false);
+
+    // return if task title is empty or unchanged
+    if (!taskTitle || taskTitle === task.title) return;
     await taskMutation.updateTitle(projectId, task.id, taskTitle);
   };
 
@@ -138,7 +132,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
               type="text"
               value={taskTitle}
               onChange={handleChange}
-              onBlur={() => void handleSave}
+              onBlur={() => void handleSave()}
               placeholder="Task title..."
               onKeyDown={(event) => event.key === "Enter" && void handleSave()}
               className="m-0 w-full truncate border-b bg-gray-700 text-left text-gray-200 outline-none"
@@ -146,7 +140,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, projectId }) => {
               autoFocus
             />
           ) : (
-            <div className="w-full cursor-pointer" onClick={handleRename}>
+            <div
+              className="w-full cursor-pointer"
+              onClick={() => setEditing(true)}
+            >
               {taskTitle}
             </div>
           )}

@@ -53,10 +53,18 @@ const KanbanPage: React.FC = () => {
 
   useEffect(() => {
     dbProjectData && setNewProjectTitle(dbProjectData.title);
-    // setTasks(dbProjectData?.tasks ?? []);
     setDomLoaded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // use effect on dbProjectData change
+  useEffect(() => {
+    if (dbProjectData) {
+      setTasks(dbProjectData.tasks ?? []);
+      // console.log("dbProjectData", dbProjectData.tasks);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dbProjectData]);
 
   const handleEditTitle = async () => {
     // return if task title is empty
@@ -76,10 +84,11 @@ const KanbanPage: React.FC = () => {
   };
 
   useEffect(() => {
-    setTodoTasks(tasks.filter((task) => task.step === "TODO"));
-    setInProgressTasks(tasks.filter((task) => task.step === "IN_PROGRESS"));
-    setDoneTasks(tasks.filter((task) => task.step === "DONE"));
-    console.log("tasks", tasks);
+    setTodoTasks([...tasks.filter((task) => task.step === "TODO")]);
+    setInProgressTasks([
+      ...tasks.filter((task) => task.step === "IN_PROGRESS"),
+    ]);
+    setDoneTasks([...tasks.filter((task) => task.step === "DONE")]);
   }, [tasks]);
 
   const Label = ({ title }: { title: string }) => (

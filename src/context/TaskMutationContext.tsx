@@ -1,8 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, type ReactNode } from "react";
 import { mutate } from "swr";
-import { useGetTasksContext } from "./GetTaskContext";
-import { type Project } from "~/utils/types";
 
 interface TaskMutationContextType {
   createNewTask: (
@@ -50,7 +48,6 @@ interface TaskMutationProviderProps {
 export const TaskMutationProvider: React.FC<TaskMutationProviderProps> = ({
   children,
 }) => {
-  const { setTasks } = useGetTasksContext();
   const createNewTask = async (
     projectId: string,
     taskTitle: string,
@@ -58,11 +55,7 @@ export const TaskMutationProvider: React.FC<TaskMutationProviderProps> = ({
   ) => {
     try {
       await axios.post("/api/task/create", { projectId, taskTitle, order });
-      await mutate(`/api/task/get-all?projectId=${projectId}`).then(
-        (res: Project) => {
-          setTasks(res.tasks ?? []);
-        }
-      );
+      await mutate(`/api/task/get-all?projectId=${projectId}`);
     } catch (error) {
       console.error("Error creating task:", error);
     }
